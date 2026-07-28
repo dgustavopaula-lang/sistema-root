@@ -1,0 +1,62 @@
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.20;
+
+contract VendaImovel {
+
+    string public idImovel;
+    string public hashDocumento;
+
+    address public vendedor;
+    address public comprador;
+
+    uint public valor;
+
+    bool public escrituraRegistrada;
+    bool public vendaConcluida;
+
+
+    constructor(
+        string memory _idImovel,
+        string memory _hashDocumento,
+        uint _valor
+    ){
+
+        idImovel = _idImovel;
+        hashDocumento = _hashDocumento;
+        valor = _valor;
+
+        vendedor = msg.sender;
+    }
+
+
+    function registrarComprador(
+        address _comprador
+    ) public {
+
+        comprador = _comprador;
+
+    }
+
+
+    function confirmarEscritura()
+    public {
+
+        escrituraRegistrada = true;
+
+    }
+
+
+    function concluirVenda()
+    public {
+
+        require(
+            escrituraRegistrada == true,
+            "A escritura ainda nao foi registrada"
+        );
+
+        vendaConcluida = true;
+
+    }
+
+}

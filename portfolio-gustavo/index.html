@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gustavo Paula Santos — GPS.dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0f172a; --bg2:#1e293b; --bg3:#334155;
+      --laranja:#F97316; --laranja2:#ea6a0a;
+      --texto:#e2e8f0; --muted:#94a3b8; --verde:#22c55e;
+      --fonte:'Sora',sans-serif; --inter:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { background:var(--bg); color:var(--texto); font-family:var(--fonte); line-height:1.6; }
+
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      background:rgba(15,23,42,0.95); backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--bg3);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 2rem; height:60px;
+    }
+    .nav-logo { font-family:var(--mono); font-size:1.1rem; color:var(--laranja); text-decoration:none; }
+    .nav-links { display:flex; gap:1.5rem; list-style:none; }
+    .nav-links a { color:var(--muted); text-decoration:none; font-size:0.9rem; transition:color 0.2s; }
+    .nav-links a:hover { color:var(--laranja); }
+
+    .hero {
+      min-height:100vh; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; text-align:center;
+      padding:6rem 2rem 4rem;
+      background:radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.1) 0%, transparent 65%);
+    }
+    .terminal-tag {
+      display:inline-flex; align-items:center; gap:0.5rem;
+      background:var(--bg2); border:1px solid var(--bg3);
+      color:var(--muted); font-family:var(--mono); font-size:0.82rem;
+      padding:0.4rem 1rem; border-radius:8px; margin-bottom:2rem;
+    }
+    .terminal-tag span { color:var(--laranja); }
+    .hero h1 { font-size:clamp(2.2rem,5vw,3.5rem); font-weight:700; line-height:1.15; margin-bottom:0.5rem; }
+    .hero h1 em { font-style:normal; color:var(--laranja); }
+    .hero-sub { font-family:var(--mono); font-size:0.95rem; color:var(--laranja); margin-bottom:1.2rem; }
+    .hero p { font-size:1rem; color:var(--muted); max-width:520px; margin:0 auto 2.5rem; font-family:var(--inter); }
+    .hero-btns { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin-bottom:2.5rem; }
+    .btn {
+      display:inline-flex; align-items:center; gap:0.5rem;
+      padding:0.7rem 1.4rem; border-radius:8px;
+      font-family:var(--fonte); font-size:0.9rem; font-weight:600;
+      text-decoration:none; cursor:pointer; border:none; transition:all 0.2s;
+    }
+    .btn-primary { background:var(--laranja); color:white; }
+    .btn-primary:hover { background:var(--laranja2); transform:translateY(-2px); }
+    .btn-outline { background:transparent; color:var(--texto); border:1px solid var(--bg3); }
+    .btn-outline:hover { border-color:var(--laranja); color:var(--laranja); }
+    .idiomas { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; }
+    .idioma-tag {
+      background:var(--bg2); border:1px solid var(--bg3);
+      color:var(--muted); font-size:0.78rem; padding:0.25rem 0.75rem;
+      border-radius:6px; font-family:var(--mono);
+    }
+
+    section { padding:5rem 2rem; }
+    .container { max-width:1080px; margin:0 auto; }
+    .section-tag { font-family:var(--mono); font-size:0.78rem; color:var(--laranja); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.4rem; }
+    .section-title { font-size:clamp(1.5rem,3vw,2rem); font-weight:700; margin-bottom:0.75rem; }
+    .section-sub { color:var(--muted); font-family:var(--inter); max-width:540px; margin-bottom:2.5rem; font-size:0.95rem; }
+    .divider { height:1px; background:linear-gradient(to right,transparent,var(--bg3),transparent); }
+
+    .sobre-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
+    .sobre-texto p { color:var(--muted); font-family:var(--inter); font-size:0.95rem; margin-bottom:1rem; }
+    .sobre-texto p strong { color:var(--texto); }
+    .sobre-cards { display:flex; flex-direction:column; gap:1rem; }
+    .sobre-card {
+      background:var(--bg2); border:1px solid var(--bg3); border-radius:10px;
+      padding:1rem 1.25rem; display:flex; align-items:center; gap:1rem;
+    }
+    .sobre-card i { font-size:1.3rem; color:var(--laranja); }
+    .sobre-card h4 { font-size:0.9rem; margin-bottom:0.15rem; }
+    .sobre-card p { font-size:0.8rem; color:var(--muted); font-family:var(--inter); }
+
+    .plataforma-bg { background:var(--bg2); }
+    .plataforma-card {
+      background:var(--bg); border:1px solid var(--laranja); border-radius:16px;
+      padding:3rem; display:grid; grid-template-columns:1fr auto;
+      gap:2rem; align-items:center; position:relative; overflow:hidden;
+    }
+    .plataforma-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(to right,var(--laranja),transparent);
+    }
+    .plataforma-card h3 { font-size:1.5rem; margin-bottom:0.75rem; }
+    .plataforma-card h3 span { color:var(--laranja); }
+    .plataforma-card p { color:var(--muted); font-family:var(--inter); font-size:0.95rem; margin-bottom:1.5rem; max-width:480px; }
+    .plataforma-stats { display:flex; gap:2rem; margin-bottom:1.5rem; }
+    .p-stat-num { font-size:1.5rem; font-weight:700; color:var(--laranja); font-family:var(--mono); }
+    .p-stat-label { font-size:0.78rem; color:var(--muted); }
+    .plataforma-badge {
+      background:rgba(249,115,22,0.1); border:1px solid rgba(249,115,22,0.3);
+      color:var(--laranja); font-family:var(--mono); font-size:0.75rem;
+      padding:0.3rem 0.8rem; border-radius:6px; white-space:nowrap; align-self:flex-start;
+    }
+
+    .projetos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.25rem; }
+    .projeto-card {
+      background:var(--bg2); border:1px solid var(--bg3); border-radius:12px;
+      padding:1.5rem; transition:all 0.2s; text-decoration:none; color:var(--texto); display:block;
+    }
+    .projeto-card:hover { border-color:var(--laranja); transform:translateY(-3px); }
+    .projeto-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem; }
+    .projeto-icon {
+      width:38px; height:38px; background:rgba(249,115,22,0.1); border-radius:8px;
+      display:flex; align-items:center; justify-content:center; font-size:1.1rem; color:var(--laranja);
+    }
+    .projeto-status { font-size:0.72rem; padding:0.2rem 0.6rem; border-radius:999px; font-family:var(--mono); }
+    .status-entregue { background:rgba(34,197,94,0.1); color:var(--verde); border:1px solid rgba(34,197,94,0.3); }
+    .status-ativo { background:rgba(249,115,22,0.1); color:var(--laranja); border:1px solid rgba(249,115,22,0.3); }
+    .projeto-card h3 { font-size:0.95rem; margin-bottom:0.3rem; }
+    .projeto-card p { font-size:0.82rem; color:var(--muted); font-family:var(--inter); }
+
+    .stack-bg { background:var(--bg2); }
+    .stack-grid { display:flex; flex-wrap:wrap; gap:0.75rem; }
+    .stack-tag {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      background:var(--bg); border:1px solid var(--bg3); color:var(--texto);
+      font-size:0.85rem; padding:0.5rem 1rem; border-radius:8px;
+      font-family:var(--mono); transition:border-color 0.2s;
+    }
+    .stack-tag:hover { border-color:var(--laranja); }
+    .stack-tag i { color:var(--laranja); }
+
+    .contato-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
+    .contato-card {
+      background:var(--bg2); border:1px solid var(--bg3); border-radius:10px;
+      padding:1.25rem; display:flex; align-items:center; gap:1rem;
+      text-decoration:none; color:var(--texto); transition:border-color 0.2s;
+    }
+    .contato-card:hover { border-color:var(--laranja); }
+    .contato-card i { font-size:1.4rem; color:var(--laranja); }
+    .contato-card span { font-size:0.85rem; color:var(--muted); font-family:var(--inter); }
+    .contato-card strong { display:block; font-size:0.9rem; }
+
+    footer {
+      background:var(--bg2); border-top:1px solid var(--bg3);
+      padding:2rem; text-align:center; color:var(--muted);
+      font-size:0.85rem; font-family:var(--inter);
+    }
+    footer strong { color:var(--laranja); }
+
+    @media(max-width:768px){
+      .sobre-grid { grid-template-columns:1fr; }
+      .plataforma-card { grid-template-columns:1fr; }
+      .nav-links { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">GPS.dev</a>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#plataforma">Plataforma</a></li>
+    <li><a href="#projetos">Projetos</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="terminal-tag"><span>$</span> ./init GPS.dev --mode=production</div>
+  <h1>Gustavo Paula Santos<br><em>GPS.dev</em></h1>
+  <div class="hero-sub">Desenvolvedor · Filósofo · Pesquisador</div>
+  <p>Construo sistemas leves de gestão para pequenos negócios — HTML, CSS e JS puro, sem framework, publicados no GitHub Pages.</p>
+  <div class="hero-btns">
+    <a href="#plataforma" class="btn btn-primary"><i class="ri-rocket-line"></i> Ver plataforma</a>
+    <a href="#projetos" class="btn btn-outline"><i class="ri-folder-line"></i> Projetos</a>
+  </div>
+  <div class="idiomas">
+    <span class="idioma-tag">🇧🇷 Português</span>
+    <span class="idioma-tag">🇺🇸 English</span>
+    <span class="idioma-tag">🇪🇸 Español</span>
+    <span class="idioma-tag">🇮🇱 עברית</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<section id="sobre">
+  <div class="container">
+    <div class="sobre-grid">
+      <div class="sobre-texto">
+        <div class="section-tag">// sobre</div>
+        <h2 class="section-title">Quem sou</h2>
+        <p>Doutor em <strong>Psicologia Social</strong>, graduado em <strong>Filosofia</strong> e <strong>Teologia</strong>. Professor de inglês com público internacional.</p>
+        <p>Desenvolvo sistemas web leves para pequenos negócios — hotéis, farmácias, agronegócio, clínicas e mais. Stack deliberadamente simples: <strong>HTML, CSS e JavaScript puro</strong>.</p>
+        <p>Cada sistema é publicado no GitHub Pages e entregue com contrato de manutenção mensal via modelo SaaS.</p>
+      </div>
+      <div class="sobre-cards">
+        <div class="sobre-card"><i class="ri-graduation-cap-line"></i><div><h4>Acadêmico</h4><p>Doutor em Psicologia Social · Filosofia · Teologia</p></div></div>
+        <div class="sobre-card"><i class="ri-code-s-slash-line"></i><div><h4>Desenvolvedor</h4><p>HTML / CSS / JS puro · VS Code · Git · GitHub Pages</p></div></div>
+        <div class="sobre-card"><i class="ri-translate-line"></i><div><h4>Multilíngue</h4><p>Português · English · Español · עברית</p></div></div>
+        <div class="sobre-card"><i class="ri-map-pin-line"></i><div><h4>Localização</h4><p>Brasil · Atendimento remoto nacional</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="plataforma-bg" id="plataforma">
+  <div class="container">
+    <div class="section-tag">// plataforma</div>
+    <h2 class="section-title">GPS.dev SaaS</h2>
+    <p class="section-sub">Plataforma vertical de gestão com IA integrada para pequenos e médios negócios.</p>
+    <div class="plataforma-card">
+      <div>
+        <h3><span>GPS.dev</span> — Vertical SaaS + ERP com IA</h3>
+        <p>Sistemas modulares por setor — hotelaria, farmácia, agronegócio, saúde, educação e mais. Cada vertical é um produto completo com plano base mensal e upgrade de IA disponível.</p>
+        <div class="plataforma-stats">
+          <div><div class="p-stat-num">10+</div><div class="p-stat-label">Verticais</div></div>
+          <div><div class="p-stat-num">R$100</div><div class="p-stat-label">A partir de/mês</div></div>
+          <div><div class="p-stat-num">0</div><div class="p-stat-label">Custo servidor</div></div>
+        </div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <a href="plataforma.html" class="btn btn-primary"><i class="ri-apps-line"></i> Ver catálogo completo</a>
+          <a href="documentos/gpsdev_plataforma.pdf" target="_blank" class="btn btn-outline"><i class="ri-file-pdf-line"></i> Baixar planejamento</a>
+        </div>
+      </div>
+      <div class="plataforma-badge"><i class="ri-sparkling-line"></i> IA integrada</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="projetos">
+  <div class="container">
+    <div class="section-tag">// projetos</div>
+    <h2 class="section-title">Sistemas entregues</h2>
+    <p class="section-sub">Sistemas em produção e em desenvolvimento ativo.</p>
+    <div class="projetos-grid">
+      <a href="https://dgustavopaula-lang.github.io/hotel-atlas/" target="_blank" class="projeto-card">
+        <div class="projeto-header"><div class="projeto-icon"><i class="ri-hotel-line"></i></div><span class="projeto-status status-entregue">entregue</span></div>
+        <h3>Hotel Dashboard</h3>
+        <p>Atlas Hotel · Paranaiguara. Painel, reservas, hóspedes, financeiro e governança.</p>
+      </a>
+      <div class="projeto-card">
+        <div class="projeto-header"><div class="projeto-icon"><i class="ri-medicine-bottle-line"></i></div><span class="projeto-status status-ativo">em dev</span></div>
+        <h3>Farma Dashboard</h3>
+        <p>Controle de estoque, validades, vendas e resumo diário para farmácias.</p>
+      </div>
+      <div class="projeto-card">
+        <div class="projeto-header"><div class="projeto-icon"><i class="ri-plant-line"></i></div><span class="projeto-status status-ativo">ativo</span></div>
+        <h3>AgroDigital</h3>
+        <p>Gestão de propriedades rurais, safras, insumos e financeiro agrícola.</p>
+      </div>
+      <div class="projeto-card">
+        <div class="projeto-header"><div class="projeto-icon"><i class="ri-book-open-line"></i></div><span class="projeto-status status-ativo">ativo</span></div>
+        <h3>EnglishDashboard</h3>
+        <p>Gestão de alunos, aulas, progresso e financeiro para professores de inglês.</p>
+      </div>
+      <div class="projeto-card">
+        <div class="projeto-header"><div class="projeto-icon"><i class="ri-safe-line"></i></div><span class="projeto-status status-ativo">ativo</span></div>
+        <h3>Cofre Digital</h3>
+        <p>Controle financeiro pessoal com metas, receitas, despesas e projeções.</p>
+      </div>
+      <a href="plataforma.html" class="projeto-card" style="border-style:dashed;display:flex;align-items:center;justify-content:center;gap:0.5rem;color:var(--muted);min-height:120px">
+        <i class="ri-add-line"></i><span style="font-size:0.9rem">Ver todos os sistemas</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="stack-bg">
+  <div class="container">
+    <div class="section-tag">// stack</div>
+    <h2 class="section-title">Tecnologias</h2>
+    <p class="section-sub">Stack deliberadamente leve — sem framework, sem build tools.</p>
+    <div class="stack-grid">
+      <span class="stack-tag"><i class="ri-html5-line"></i> HTML5</span>
+      <span class="stack-tag"><i class="ri-css3-line"></i> CSS3</span>
+      <span class="stack-tag"><i class="ri-javascript-line"></i> JavaScript</span>
+      <span class="stack-tag"><i class="ri-github-line"></i> GitHub Pages</span>
+      <span class="stack-tag"><i class="ri-git-branch-line"></i> Git</span>
+      <span class="stack-tag"><i class="ri-code-s-slash-line"></i> VS Code</span>
+      <span class="stack-tag"><i class="ri-robot-line"></i> Anthropic Claude API</span>
+      <span class="stack-tag"><i class="ri-terminal-line"></i> Linux / Debian</span>
+      <span class="stack-tag"><i class="ri-database-line"></i> Supabase</span>
+      <span class="stack-tag"><i class="ri-remixicon-line"></i> Remix Icons</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="contato">
+  <div class="container">
+    <div class="section-tag">// contato</div>
+    <h2 class="section-title">Fale comigo</h2>
+    <p class="section-sub">Disponível para projetos, parcerias e manutenção de sistemas.</p>
+    <div class="contato-grid">
+      <a href="mailto:dgustavopaula@gmail.com" class="contato-card">
+        <i class="ri-mail-line"></i><div><strong>E-mail</strong><span>dgustavopaula@gmail.com</span></div>
+      </a>
+      <a href="https://github.com/dgustavopaula-lang" target="_blank" class="contato-card">
+        <i class="ri-github-line"></i><div><strong>GitHub</strong><span>dgustavopaula-lang</span></div>
+      </a>
+      <a href="plataforma.html" class="contato-card">
+        <i class="ri-apps-line"></i><div><strong>Plataforma GPS.dev</strong><span>Ver catálogo de sistemas</span></div>
+      </a>
+      <a href="documentos/gpsdev_plataforma.pdf" target="_blank" class="contato-card">
+        <i class="ri-file-pdf-line"></i><div><strong>Planejamento SaaS</strong><span>Baixar PDF completo</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>GPS.dev</strong> · Gustavo Paula Santos · 2026</p>
+  <p style="margin-top:0.4rem">Sistemas leves para pequenos negócios · HTML/CSS/JS puro · GitHub Pages</p>
+</footer>
+
+</body>
+</html>

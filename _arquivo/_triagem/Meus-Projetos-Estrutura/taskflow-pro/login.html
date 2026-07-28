@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskFlow Pro — Entrar</title>
+  <link rel="stylesheet" href="login.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- FUNDO ANIMADO -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <!-- CONTAINER CENTRAL -->
+  <div class="auth-wrap">
+
+    <!-- LOGO -->
+    <div class="auth-logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">TaskFlow<span class="pro-badge">PRO</span></span>
+    </div>
+
+    <!-- CARD -->
+    <div class="auth-card">
+
+      <!-- ABAS LOGIN / CADASTRO -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="mostrarAba('login')">Entrar</button>
+        <button class="auth-tab" id="tab-cadastro" onclick="mostrarAba('cadastro')">Criar conta</button>
+      </div>
+
+      <!-- ===== FORMULÁRIO LOGIN ===== -->
+      <div id="form-login" class="auth-form">
+        <p class="auth-sub">Bem-vindo de volta 👋</p>
+
+        <div class="field-group">
+          <label>E-mail</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email"/>
+          </div>
+          <span class="field-error" id="err-login-email"></span>
+        </div>
+
+        <div class="field-group">
+          <label>Senha</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="login-senha" placeholder="••••••••" autocomplete="current-password"/>
+            <button class="toggle-senha" onclick="toggleSenha('login-senha', this)" tabindex="-1">👁</button>
+          </div>
+          <span class="field-error" id="err-login-senha"></span>
+        </div>
+
+        <div class="login-extras">
+          <label class="check-wrap">
+            <input type="checkbox" id="lembrar"/> Lembrar de mim
+          </label>
+          <button class="link-btn" onclick="mostrarRecuperar()">Esqueci a senha</button>
+        </div>
+
+        <button class="btn-primary" onclick="fazerLogin()">
+          <span id="login-txt">Entrar</span>
+          <span id="login-loader" class="loader" style="display:none"></span>
+        </button>
+
+        <div class="divider"><span>ou continue com</span></div>
+
+        <div class="social-btns">
+          <button class="btn-social" onclick="loginDemo()">🎯 Entrar como Demo</button>
+        </div>
+      </div>
+
+      <!-- ===== FORMULÁRIO CADASTRO ===== -->
+      <div id="form-cadastro" class="auth-form" style="display:none">
+        <p class="auth-sub">Crie sua conta grátis ✨</p>
+
+        <div class="field-group">
+          <label>Nome completo</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="cad-nome" placeholder="João Silva"/>
+          </div>
+          <span class="field-error" id="err-cad-nome"></span>
+        </div>
+
+        <div class="field-group">
+          <label>E-mail</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input type="email" id="cad-email" placeholder="seu@email.com"/>
+          </div>
+          <span class="field-error" id="err-cad-email"></span>
+        </div>
+
+        <div class="field-group">
+          <label>Senha</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="cad-senha" placeholder="Mínimo 6 caracteres"/>
+            <button class="toggle-senha" onclick="toggleSenha('cad-senha', this)" tabindex="-1">👁</button>
+          </div>
+          <span class="field-error" id="err-cad-senha"></span>
+        </div>
+
+        <div class="field-group">
+          <label>Confirmar senha</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="cad-confirmar" placeholder="Repita a senha"/>
+            <button class="toggle-senha" onclick="toggleSenha('cad-confirmar', this)" tabindex="-1">👁</button>
+          </div>
+          <span class="field-error" id="err-cad-confirmar"></span>
+        </div>
+
+        <!-- Força da senha -->
+        <div class="senha-forca" id="senha-forca" style="display:none">
+          <div class="forca-bar">
+            <div class="forca-fill" id="forca-fill"></div>
+          </div>
+          <span class="forca-label" id="forca-label"></span>
+        </div>
+
+        <label class="check-wrap termos">
+          <input type="checkbox" id="aceitar-termos"/>
+          Aceito os <button class="link-btn" onclick="alert('Termos em breve!')">termos de uso</button>
+        </label>
+        <span class="field-error" id="err-termos"></span>
+
+        <button class="btn-primary" onclick="fazerCadastro()">
+          <span id="cad-txt">Criar conta grátis</span>
+          <span id="cad-loader" class="loader" style="display:none"></span>
+        </button>
+      </div>
+
+      <!-- ===== RECUPERAR SENHA ===== -->
+      <div id="form-recuperar" class="auth-form" style="display:none">
+        <p class="auth-sub">Recuperar senha 🔑</p>
+        <p class="auth-hint">Informe seu e-mail e enviaremos as instruções.</p>
+
+        <div class="field-group">
+          <label>E-mail cadastrado</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input type="email" id="rec-email" placeholder="seu@email.com"/>
+          </div>
+          <span class="field-error" id="err-rec-email"></span>
+        </div>
+
+        <button class="btn-primary" onclick="recuperarSenha()">Enviar instruções</button>
+        <button class="link-btn center" onclick="mostrarAba('login')">← Voltar ao login</button>
+      </div>
+
+    </div>
+
+    <!-- RODAPÉ -->
+    <p class="auth-footer">
+      TaskFlow Pro © 2025 · <button class="link-btn" onclick="alert('Em breve!')">Privacidade</button> · <button class="link-btn" onclick="alert('Em breve!')">Termos</button>
+    </p>
+
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="login.js"></script>
+</body>
+</html>

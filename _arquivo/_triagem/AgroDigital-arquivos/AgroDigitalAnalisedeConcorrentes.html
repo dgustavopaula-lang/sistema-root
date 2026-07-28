@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroDigital · Análise de Concorrentes</title>
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --bg:           #0B1120;
+      --bg-elev:      #111827;
+      --bg-card:      #15202e;
+      --surface:      #1a2a3a;
+      --border:       rgba(255,255,255,.08);
+      --border-soft:  rgba(255,255,255,.05);
+
+      --ink:          #e8f0f8;
+      --ink-2:        rgba(232,240,248,.65);
+      --ink-3:        rgba(232,240,248,.38);
+
+      --gold:         #D4A017;
+      --gold-soft:    rgba(212,160,23,.12);
+      --gold-glow:    rgba(212,160,23,.25);
+
+      --green:        #22c55e;
+      --green-soft:   rgba(34,197,94,.12);
+      --red:          #ef4444;
+      --red-soft:     rgba(239,68,68,.12);
+      --amber:        #f59e0b;
+      --amber-soft:   rgba(245,158,11,.12);
+
+      --radius:       10px;
+      --radius-sm:    6px;
+      --radius-lg:    16px;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 900px 600px at 80% -5%, rgba(212,160,23,.07) transparent 70%),
+        radial-gradient(ellipse 700px 400px at 10% 110%, rgba(34,197,94,.05) transparent 70%);
+      color: var(--ink);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ─── LAYOUT ─────────────────────────────────────────── */
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────────── */
+    header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .leaf {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border-radius: 50% 50% 50% 10%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 20px rgba(34,197,94,.3);
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.3px;
+    }
+
+    .brand-text h1 span { color: #22c55e; }
+
+    .brand-text .sub {
+      font-size: 12px;
+      color: var(--ink-3);
+      margin-top: 1px;
+    }
+
+    .stamp {
+      font-size: 11px;
+      color: var(--ink-3);
+      text-align: right;
+      line-height: 1.5;
+    }
+
+    .stamp strong { color: var(--gold); display: block; font-size: 12px; }
+
+    .goldline {
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), rgba(212,160,23,0) 70%);
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+
+    /* ─── TABS ───────────────────────────────────────────── */
+    nav.tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 6px;
+    }
+
+    .tab {
+      background: none;
+      border: none;
+      border-radius: var(--radius);
+      padding: 9px 18px;
+      font-size: 13.5px;
+      color: var(--ink-2);
+      cursor: pointer;
+      transition: all .2s;
+      font-family: inherit;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .tab:hover  { background: var(--surface); color: var(--ink); }
+    .tab.active { background: var(--gold-soft); border: 1px solid var(--gold-glow); color: var(--gold); font-weight: 600; }
+
+    /* ─── PANELS ─────────────────────────────────────────── */
+    .panel         { display: none; animation: fadein .25s ease; }
+    .panel.active  { display: block; }
+
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ─── SECTION HEADINGS ───────────────────────────────── */
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 18px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    h2:not(:first-child) { margin-top: 0; }
+
+    /* ─── OVERVIEW CARDS ─────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+      cursor: default;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold-glow);
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    }
+
+    .card .k {
+      font-size: 10.5px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 6px;
+    }
+
+    .card .v {
+      font-size: 14px;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .card .v strong { color: var(--gold); }
+
+    /* ─── COMPARISON TABLE ───────────────────────────────── */
+    .tblwrap {
+      position: relative;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 32px;
+      /* scroll suave */
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* indicador "role para ver mais" */
+    .tblwrap::after {
+      content: 'role para ver mais →';
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      color: var(--ink-3);
+      padding: 6px;
+      background: linear-gradient(transparent, var(--bg-card));
+      pointer-events: none;
+    }
+
+    table {
+      width: 100%;
+      min-width: 960px;   /* largura real necessária para 6 colunas */
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    /* larguras fixas por coluna */
+    table colgroup col:nth-child(1) { width: 160px; }  /* Critério */
+    table colgroup col:nth-child(2) { width: 160px; }  /* AgroDigital */
+    table colgroup col:nth-child(3) { width: 150px; }  /* Aegro */
+    table colgroup col:nth-child(4) { width: 170px; }  /* Solinftec */
+    table colgroup col:nth-child(5) { width: 160px; }  /* Agrotools */
+    table colgroup col:nth-child(6) { width: 160px; }  /* FieldView */
+
+    th, td {
+      padding: 11px 14px;
+      text-align: left;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border-soft);
+      vertical-align: middle;
+      word-break: break-word;
+    }
+
+    thead th {
+      background: var(--surface);
+      color: var(--ink-2);
+      font-size: 11.5px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* coluna AgroDigital no header */
+    thead th.you {
+      background: rgba(212,160,23,.15);
+      color: var(--gold);
+      border-bottom: 2px solid var(--gold-glow);
+    }
+
+    thead th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+    thead th:last-child  { border-radius: 0 var(--radius-sm) 0 0; }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(255,255,255,.025); }
+
+    td.you {
+      background: rgba(212,160,23,.05);
+      border-left: 2px solid rgba(212,160,23,.2);
+      border-right: 2px solid rgba(212,160,23,.2);
+    }
+
+    td:first-child {
+      color: var(--ink-2);
+      font-weight: 600;
+      font-size: 12.5px;
+      background: var(--bg-card);
+      /* fixa coluna critério ao rolar */
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      box-shadow: 2px 0 8px rgba(0,0,0,.3);
+    }
+
+    /* ─── PILLS ──────────────────────────────────────────── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .pill.win  { background: var(--green-soft);  color: var(--green); }
+    .pill.lose { background: var(--red-soft);    color: var(--red); }
+    .pill.tie  { background: var(--amber-soft);  color: var(--amber); }
+    .pill.na   { background: rgba(255,255,255,.05); color: var(--ink-3); }
+
+    /* ─── COMPETITOR PROFILE ─────────────────────────────── */
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding: 20px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+
+    .plogo {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius);
+      background: var(--gold-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+      border: 1px solid var(--gold-glow);
+    }
+
+    .profile-info h2 {
+      font-size: 20px;
+      margin: 0 0 4px;
+      padding: 0;
+      border: none;
+    }
+
+    .profile-info h2::before { display: none; }
+
+    .tagline {
+      color: var(--ink-3);
+      font-size: 13px;
+    }
+
+    .site {
+      margin-top: 6px;
+      font-size: 12.5px;
+    }
+
+    .site a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .site a:hover { text-decoration: underline; }
+
+    .facts {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .fact {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--ink-2);
+    }
+
+    .fact b { color: var(--gold); }
+
+    /* ─── WHAT THEY SELL ─────────────────────────────────── */
+    .sell-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink-2);
+    }
+
+    .sell-block strong { color: var(--ink); }
+
+    /* ─── WIN / LOSE BOXES ───────────────────────────────── */
+    .duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) { .duo { grid-template-columns: 1fr; } }
+
+    .box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+
+    .box h3 {
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .box.winbox  h3 { color: var(--green); border-color: var(--green-soft); }
+    .box.lossbox h3 { color: var(--red);   border-color: var(--red-soft); }
+
+    .box ul  { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .box li  {
+      background: var(--surface);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--ink-2);
+      line-height: 1.5;
+      position: relative;
+      padding-left: 22px;
+    }
+
+    .box.winbox  li::before { content: '✓'; position: absolute; left: 8px; color: var(--green); font-weight: 700; }
+    .box.lossbox li::before { content: '✗'; position: absolute; left: 8px; color: var(--red); font-weight: 700; }
+
+    .box li b { color: var(--ink); }
+
+    /* ─── CALLOUT ────────────────────────────────────────── */
+    .callout {
+      background: linear-gradient(135deg, rgba(212,160,23,.1), rgba(212,160,23,.04));
+      border: 1px solid rgba(212,160,23,.3);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      margin-bottom: 28px;
+    }
+
+    .callout .k {
+      font-size: 10.5px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .callout p {
+      font-size: 14px;
+      color: var(--ink-2);
+      line-height: 1.7;
+    }
+
+    .callout p b { color: var(--ink); }
+
+    /* ─── NUMBERED OPP LIST ──────────────────────────────── */
+    .opplist {
+      counter-reset: opp;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .opplist li {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      padding: 16px 20px 16px 60px;
+      font-size: 14px;
+      color: var(--ink-2);
+      line-height: 1.6;
+      position: relative;
+    }
+
+    .opplist li::before {
+      counter-increment: opp;
+      content: counter(opp);
+      position: absolute;
+      left: 18px;
+      top: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--gold);
+      font-variant-numeric: tabular-nums;
+      width: 28px;
+      height: 28px;
+      background: var(--gold-soft);
+      border: 1px solid var(--gold-glow);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .opplist li b { color: var(--ink); }
+
+    /* ─── COMPETITOR BOX / PROFILE SECTION SEPARATOR ─────── */
+    .section-sep {
+      height: 1px;
+      background: var(--border);
+      margin: 36px 0;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 11.5px;
+      color: var(--ink-3);
+      line-height: 1.7;
+    }
+
+    footer a { color: var(--gold); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ─── OPORTUNIDADES ─────────────────────────────────── */
+    .opp-legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .opp-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      letter-spacing: .04em;
+    }
+
+    .opp-badge.alta    { background: rgba(34,197,94,.12);   color: var(--green); border: 1px solid rgba(34,197,94,.25); }
+    .opp-badge.media   { background: rgba(245,158,11,.12);  color: var(--amber); border: 1px solid rgba(245,158,11,.25); }
+    .opp-badge.roadmap { background: rgba(99,179,237,.12);  color: #63b3ed;      border: 1px solid rgba(99,179,237,.25); }
+
+    .opp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .opp-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+
+    .opp-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0,0,0,.3);
+      border-color: var(--gold-glow);
+    }
+
+    .opp-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .opp-num {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--ink-3);
+      letter-spacing: .1em;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 2px 8px;
+    }
+
+    .opp-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .opp-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .opp-body {
+      font-size: 13px;
+      color: var(--ink-2);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .opp-body em { color: var(--gold); font-style: normal; }
+
+    .opp-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .opp-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--ink-3);
+      border: 1px solid var(--border-soft);
+    }
+
+    .opp-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .opp-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--ink-3);
+    }
+
+    .opp-bar-row span { width: 46px; flex-shrink: 0; }
+
+    .opp-bar {
+      flex: 1;
+      height: 5px;
+      background: var(--surface);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .opp-fill {
+      height: 100%;
+      border-radius: 99px;
+      opacity: .8;
+    }
+
+    /* ─── MATRIZ ESFORÇO × IMPACTO ──────────────────────── */
+    .matrix-wrap {
+      margin-bottom: 36px;
+      position: relative;
+      padding: 24px 0 24px 32px;
+    }
+
+    .matrix {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 3px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .m-axis-y {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateX(-100%) translateY(-50%) rotate(-90deg);
+      font-size: 11px;
+      color: var(--ink-3);
+      white-space: nowrap;
+      padding-right: 8px;
+    }
+
+    .m-axis-x {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(100%);
+      font-size: 11px;
+      color: var(--ink-3);
+      padding-top: 6px;
+    }
+
+    .m-quad {
+      position: relative;
+      padding: 12px 14px;
+    }
+
+    .q1 { background: rgba(34,197,94,.04);  border-radius: var(--radius) 0 0 0; }
+    .q2 { background: rgba(245,158,11,.04); border-radius: 0 var(--radius) 0 0; }
+    .q3 { background: rgba(99,179,237,.04); border-radius: 0 0 0 var(--radius); }
+    .q4 { background: rgba(239,68,68,.04);  border-radius: 0 0 var(--radius) 0; }
+
+    .q-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+
+    .m-dot {
+      position: absolute;
+      cursor: default;
+    }
+
+    .m-dot-inner {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      transition: transform .15s;
+    }
+
+    .m-dot:hover .m-dot-inner { transform: scale(1.4); }
+
+    .m-dot-inner.alta    { background: var(--green); box-shadow: 0 0 8px rgba(34,197,94,.5); }
+    .m-dot-inner.media   { background: var(--amber); box-shadow: 0 0 8px rgba(245,158,11,.5); }
+    .m-dot-inner.roadmap { background: #63b3ed;      box-shadow: 0 0 8px rgba(99,179,237,.5); }
+
+    .m-tooltip {
+      position: absolute;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 4px 9px;
+      font-size: 11px;
+      color: var(--ink);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s;
+      z-index: 10;
+    }
+
+    .m-dot:hover .m-tooltip { opacity: 1; }
+
+    /* pitch destacado */
+    .callout.pitch {
+      background: linear-gradient(135deg, rgba(212,160,23,.15), rgba(34,197,94,.06));
+      border-color: rgba(212,160,23,.4);
+    }
+
+    .callout.pitch p {
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .wrap { padding: 24px 16px 60px; }
+      header { flex-direction: column; align-items: flex-start; }
+      .stamp { text-align: left; }
+      nav.tabs { gap: 4px; padding: 4px; }
+      .tab { padding: 8px 12px; font-size: 12.5px; }
+      .profile { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <header>
+    <div class="brand">
+      <div class="leaf">🌱</div>
+      <div class="brand-text">
+        <h1><span>Agro</span>Digital · Análise de Concorrentes</h1>
+        <div class="sub">Inteligência competitiva para posicionar o produto</div>
+      </div>
+    </div>
+    <div class="stamp">
+      <strong>10 de julho de 2026</strong>
+      Fontes: sites oficiais, Capterra, Forbes Agro, comparativos de mercado
+    </div>
+  </header>
+
+  <div class="goldline"></div>
+
+  <!-- ═══════════ TABS ═══════════ -->
+  <nav class="tabs">
+    <button class="tab active" data-tab="matriz">Visão Geral</button>
+    <button class="tab" data-tab="aegro">Aegro</button>
+    <button class="tab" data-tab="solinftec">Solinftec</button>
+    <button class="tab" data-tab="agrotools">Agrotools</button>
+    <button class="tab" data-tab="fieldview">Climate FieldView</button>
+    <button class="tab" data-tab="oportunidades">Oportunidades ✦</button>
+  </nav>
+
+  <!-- ═══════════ MATRIZ ═══════════ -->
+  <section id="matriz" class="panel active">
+
+    <h2>Mapa do mercado</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="k">Concorrente direto nº 1</div>
+        <div class="v"><strong>Aegro</strong> — gestão rural completa para o produtor pequeno/médio. Rival mais parecido com o AgroDigital.</div>
+      </div>
+      <div class="card">
+        <div class="k">Gigante enterprise</div>
+        <div class="v"><strong>Solinftec</strong> — IA (ALICE) + robôs Solix para grandes operações. Não briga pelo mesmo cliente.</div>
+      </div>
+      <div class="card">
+        <div class="k">Dashboard clíma azul</div>
+        <div class="v"><strong>Agrotools</strong> — vende para tradings, bancos e seguradoras (ESG, crédito), não para o produtor.</div>
+      </div>
+      <div class="card">
+        <div class="k">Referência de UX</div>
+        <div class="v"><strong>Climate FieldView</strong> (Bayer) — agricultura de precisão com plano gratuito. Estudar design, não temer o preço.</div>
+      </div>
+    </div>
+
+    <h2>Matriz de comparação</h2>
+    <div class="tblwrap">
+      <table>
+        <colgroup>
+          <col>
+          <col>
+          <col>
+          <col>
+          <col>
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Critério</th>
+            <th class="you">✦ AgroDigital</th>
+            <th>Aegro</th>
+            <th>Solinftec</th>
+            <th>Agrotools</th>
+            <th>FieldView</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Público-alvo</td>
+            <td class="you">Fazenda pequena/média</td>
+            <td>Pequeno/médio produtor</td>
+            <td>Grandes operações, usinas</td>
+            <td>Corporações &amp; tradings</td>
+            <td>Produtor de grãos (Bayer)</td>
+          </tr>
+          <tr>
+            <td>Preço (R$/mês)</td>
+            <td class="you"><span class="pill win">R$ 150–300</span></td>
+            <td><span class="pill lose">R$ 150–300 parcial</span></td>
+            <td><span class="pill na">Sob consulta</span></td>
+            <td><span class="pill tie">Grátis / R$ 1.500/ano</span></td>
+            <td><span class="pill tie">Grátis / R$ 1.500/ano</span></td>
+          </tr>
+          <tr>
+            <td>NDVI por satélite</td>
+            <td class="you"><span class="pill win">Por talhão</span></td>
+            <td><span class="pill lose">No mapa</span></td>
+            <td><span class="pill win">+ robôs em campo</span></td>
+            <td><span class="pill win">Geoespacial</span></td>
+            <td><span class="pill win">Referência</span></td>
+          </tr>
+          <tr>
+            <td>Financeiro básico</td>
+            <td class="you"><span class="pill win">N/F</span></td>
+            <td><span class="pill tie">Ponto mais forte deles</span></td>
+            <td><span class="pill na">Não é o foco</span></td>
+            <td><span class="pill na">Não tem</span></td>
+            <td><span class="pill na">Não tem</span></td>
+          </tr>
+          <tr>
+            <td>Maquinário (aluguel)</td>
+            <td class="you"><span class="pill tie">Planejado</span></td>
+            <td><span class="pill lose">Ninguém faz</span></td>
+            <td><span class="pill win">Integra máquinas, sem aluguel</span></td>
+            <td><span class="pill tie">Monitora frota própria</span></td>
+            <td><span class="pill lose">Não faz fiscal</span></td>
+          </tr>
+          <tr>
+            <td>Chatbot / IA assistente</td>
+            <td class="you"><span class="pill tie">Planejado</span></td>
+            <td><span class="pill lose">Não tem</span></td>
+            <td><span class="pill win">ALICE multiagente</span></td>
+            <td><span class="pill lose">Não tem</span></td>
+            <td><span class="pill lose">Não tem</span></td>
+          </tr>
+          <tr>
+            <td>Funciona offline</td>
+            <td class="you"><span class="pill win">Ainda não — roadmap</span></td>
+            <td><span class="pill lose">Caderno de campo offline</span></td>
+            <td><span class="pill lose">Depende de conectividade</span></td>
+            <td><span class="pill na">N/A</span></td>
+            <td><span class="pill win">Drive via Bluetooth</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- ═══════════ AEGRO ═══════════ -->
+  <section id="aegro" class="panel">
+
+    <div class="profile">
+      <div class="plogo">🌾</div>
+      <div class="profile-info">
+        <h2>Aegro</h2>
+        <div class="tagline">Gestão rural completa para o produtor pequeno/médio</div>
+        <div class="site"><a href="https://aegro.com.br" target="_blank">aegro.com.br ↗</a></div>
+      </div>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><b>61</b> avaliações no Capterra</div>
+      <div class="fact">ERP agrícola modular</div>
+      <div class="fact">Caderno de campo + Financeiro + Estoque</div>
+    </div>
+
+    <div class="sell-block">
+      <strong>O que eles vendem:</strong> Plataforma de gestão rural — financeiro, estoque e suporte como diferenciais. Vende modularidade: o produtor paga pelo que usa. Forte no controle financeiro e no suporte humano.
+    </div>
+
+    <div class="duo">
+      <div class="box lossbox">
+        <h3>Onde o Aegro ganha</h3>
+        <ul>
+          <li><b>Financeiro completo:</b> o ponto mais forte. Fluxo de caixa, DRE, contas a pagar/receber.</li>
+          <li><b>Suporte humano:</b> time dedicado — diferencial em mercado de baixa digitalização.</li>
+          <li><b>Estoque documentado:</b> insumos, produção e almoxarifado integrados.</li>
+        </ul>
+      </div>
+      <div class="box winbox">
+        <h3>Onde o AgroDigital ganha</h3>
+        <ul>
+          <li><b>Preço:</b> "80% do valor por 40% do preço" — posicionamento direto.</li>
+          <li><b>NDVI por talhão:</b> satélite nativo, não mapa genérico.</li>
+          <li><b>Design:</b> interface mais limpa e curva de aprendizado menor.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="k">Como se posicionar</div>
+      <p>Não brigar com o Aegro no fiscal — brigar na <b>simplicidade e no preço</b>: <em>"80% do valor por 40% do preço, com um painel que dá prazer de abrir. E mirar as dores documentadas: estoque e suporte."</em></p>
+    </div>
+
+  </section>
+
+  <!-- ═══════════ SOLINFTEC ═══════════ -->
+  <section id="solinftec" class="panel">
+
+    <div class="profile">
+      <div class="plogo">🤖</div>
+      <div class="profile-info">
+        <h2>Solinftec</h2>
+        <div class="tagline">ALICE AI + robôs Solix — o gigante enterprise</div>
+        <div class="site"><a href="https://www.solinftec.com/pt-br/" target="_blank">solinftec.com ↗</a></div>
+      </div>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><b>11 milhões</b> de hectares monitorados</div>
+      <div class="fact"><b>395+</b> clientes ativos (usinas, cooperativas, revendas)</div>
+      <div class="fact"><b>R$ 1,5 bi</b> já captados · meta R$ 500 mi de receita em 2026 (Forbes)</div>
+    </div>
+
+    <div class="sell-block">
+      <strong>O que eles vendem:</strong> Plataforma de inteligência ALICE (IA multiagente, lançada na Agrishow 2026) + robô de campo Solix. Foco em cana, grãos, café, floresta e citros — operações gigantes na América Latina e América do Norte. Modelo commercial enterprise com contratos sob consulta.
+    </div>
+
+    <div class="duo">
+      <div class="box lossbox">
+        <h3>Onde a Solinftec ganha</h3>
+        <ul>
+          <li><b>Escala e hardware:</b> robôs em campo e telemetria em tempo real — outra liga.</li>
+          <li><b>IA de verdade:</b> ALICE multiagente executa decisões, não só responde.</li>
+        </ul>
+      </div>
+      <div class="box winbox">
+        <h3>Onde o AgroDigital ganha</h3>
+        <ul>
+          <li><b>Não é concorrente pelo cliente:</b> a Solinftec não atende a fazenda de 200 ha — ela valida o mercado de IA no agro.</li>
+          <li><b>Inspiração barata:</b> o chatbot planejado do AgroDigital é a "ALICE do pequeno produtor".</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="k">Como usar essa referência</div>
+      <p>A Solinftec prova que <b>IA no agro brasileiro vende</b>. Use isso como argumento de tendência na apresentação do AgroDigital — <em>"o que as usinas têm com a ALICE, sua fazenda tem com o assistente AgroDigital".</em></p>
+    </div>
+
+  </section>
+
+  <!-- ═══════════ AGROTOOLS ═══════════ -->
+  <section id="agrotools" class="panel">
+
+    <div class="profile">
+      <div class="plogo">📡</div>
+      <div class="profile-info">
+        <h2>Agrotools</h2>
+        <div class="tagline">Geointeligência e ESG para corporações — mercado paralelo</div>
+        <div class="site"><a href="https://agrotools.com.br" target="_blank">agrotools.com.br ↗</a></div>
+      </div>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><b>200+</b> especialistas em 4 países</div>
+      <div class="fact"><b>12</b> das maiores tradings do planeta como clientes</div>
+      <div class="fact">Única AgTech B Corp certificada da América Latina</div>
+    </div>
+
+    <div class="sell-block">
+      <strong>O que eles vendem:</strong> Monitoramento geoespacial e compliance socioambiental para <strong>quem financia e compra do agro</strong>: crédito rural, seguro agrícola, ESG, proteção de marca e cadeia de suprimentos. O cliente é o banco, a seguradora e a trading — não o produtor.
+    </div>
+
+    <div class="duo">
+      <div class="box lossbox">
+        <h3>Onde a Agrotools ganha</h3>
+        <ul>
+          <li><b>Dados territoriais:</b> 20 anos de base geoespacial do Brasil rural.</li>
+          <li><b>Relações corporativas:</b> contratos com os maiores players do agro.</li>
+        </ul>
+      </div>
+      <div class="box winbox">
+        <h3>Onde o AgroDigital ganha</h3>
+        <ul>
+          <li><b>Zero sobreposição:</b> nenhuma disputa pelo produtor rural individual.</li>
+          <li><b>Visão de futuro:</b> se o AgroDigital acumular dados de talhões, esses dados interessam a bancos e seguradoras — a Agrotools mostra o caminho de monetização B2B na frente.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="k">Lição estratégica</div>
+      <p>A Agrotools mostra que <b>dado de fazenda vale dinheiro duas vezes</b>: uma para o produtor (gestão) e outra para o mercado (crédito, seguro, ESG). Guardar isso para o roadmap Enterprise.</p>
+    </div>
+
+  </section>
+
+  <!-- ═══════════ FIELDVIEW ═══════════ -->
+  <section id="fieldview" class="panel">
+
+    <div class="profile">
+      <div class="plogo">🛰️</div>
+      <div class="profile-info">
+        <h2>Climate FieldView</h2>
+        <div class="tagline">Agricultura de precisão da Bayer — referência de UX e preço</div>
+        <div class="site"><a href="https://climate.com/pt-br" target="_blank">climate.com/pt-br ↗</a></div>
+      </div>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><b>Grátis</b> plano de entrada (diagnóstico por talhão, clima, marcações)</div>
+      <div class="fact"><b>R$ 1.500/ano</b> plano Plus (mapas plantio, pulverização e colheita)</div>
+      <div class="fact"><b>FieldView Drive:</b> plug na máquina via porta CAN, dados por Bluetooth</div>
+    </div>
+
+    <div class="sell-block">
+      <strong>O que eles vendem:</strong> Plataforma de agricultura de precisão da Bayer — diagnóstico por talhão com NDVI, previsão meteorológica, prescrições de sementes/fertilizantes e coleta automática de dados das máquinas. O plano Plus pode até ser resgatado com pontos do programa Impulso Bayer.
+    </div>
+
+    <div class="duo">
+      <div class="box lossbox">
+        <h3>Onde o FieldView ganha</h3>
+        <ul>
+          <li><b>Preço agressivo:</b> entrada gratuita e Plus a ≈ R$ 125/mês equivalente.</li>
+          <li><b>Hardware:</b> Drive conecta na máquina e coleta dados sozinho.</li>
+          <li><b>Marca Bayer:</b> distribuição pelas revendas de insumos.</li>
+        </ul>
+      </div>
+      <div class="box winbox">
+        <h3>Onde o AgroDigital ganha</h3>
+        <ul>
+          <li><b>Gestão além da lavoura:</b> FieldView não faz financeiro, estoque nem fiscal — o AgroDigital é a fazenda inteira, não só o talhão.</li>
+          <li><b>Simplicidade:</b> comparativos apontam curva de aprendizado acentuada e dependência de boa internet no FieldView.</li>
+          <li><b>Independência:</b> produto neutro, sem amarração ao ecossistema de insumos da Bayer.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="k">Como usar essa referência</div>
+      <p>É a melhor <b>escola de UX</b> do setor — estudar o fluxo de diagnóstico por talhão deles ao desenhar o módulo de satélite. Mas atenção ao preço: com FieldView grátis na entrada, o AgroDigital precisa que o plano Essencial entregue valor visível no primeiro login.</p>
+    </div>
+
+  </section>
+
+  <!-- ═══════════ OPORTUNIDADES ═══════════ -->
+  <section id="oportunidades" class="panel">
+
+    <h2>Oportunidades para o AgroDigital</h2>
+
+    <!-- Legenda de prioridade -->
+    <div class="opp-legend">
+      <span class="opp-badge alta">● Alta prioridade</span>
+      <span class="opp-badge media">● Média prioridade</span>
+      <span class="opp-badge roadmap">● Roadmap</span>
+    </div>
+
+    <!-- Cards de oportunidade -->
+    <div class="opp-grid">
+
+      <div class="opp-card">
+        <div class="opp-header">
+          <div class="opp-num">01</div>
+          <span class="opp-badge alta">Alta prioridade</span>
+        </div>
+        <div class="opp-icon">💰</div>
+        <div class="opp-title">O vão do preço Aegro</div>
+        <div class="opp-body">Entrada a R$ 150–300/mês fica abaixo da metade do concorrente direto. Comunicar isso com clareza na landing: <em>"gestão completa a partir de R$ 150"</em>.</div>
+        <div class="opp-meta">
+          <div class="opp-tag">Landing page</div>
+          <div class="opp-tag">Posicionamento</div>
+        </div>
+        <div class="opp-bars">
+          <div class="opp-bar-row"><span>Impacto</span><div class="opp-bar"><div class="opp-fill" style="width:95%;background:var(--green)"></div></div></div>
+          <div class="opp-bar-row"><span>Esforço</span><div class="opp-bar"><div class="opp-fill" style="width:20%;background:var(--gold)"></div></div></div>
+        </div>
+      </div>
+
+      <div class="opp-card">
+        <div class="opp-header">
+          <div class="opp-num">02</div>
+          <span class="opp-badge alta">Alta prioridade</span>
+        </div>
+        <div class="opp-icon">🤖</div>
+        <div class="opp-title">Chatbot — a "ALICE do pequeno"</div>
+        <div class="opp-body">Nenhum dos quatro concorrentes tem IA conversacional para o produtor médio. A Solinftec validou o mercado com gigantes — o AgroDigital pode ser a versão acessível. API pública do John Deere Operations Center viabiliza integração.</div>
+        <div class="opp-meta">
+          <div class="opp-tag">Produto</div>
+          <div class="opp-tag">IA</div>
+          <div class="opp-tag">Diferenciação</div>
+        </div>
+        <div class="opp-bars">
+          <div class="opp-bar-row"><span>Impacto</span><div class="opp-bar"><div class="opp-fill" style="width:90%;background:var(--green)"></div></div></div>
+          <div class="opp-bar-row"><span>Esforço</span><div class="opp-bar"><div class="opp-fill" style="width:70%;background:var(--gold)"></div></div></div>
+        </div>
+      </div>
+
+      <div class="opp-card">
+        <div class="opp-header">
+          <div class="opp-num">03</div>
+          <span class="opp-badge alta">Alta prioridade</span>
+        </div>
+        <div class="opp-icon">🎨</div>
+        <div class="opp-title">Design como diferencial declarado</div>
+        <div class="opp-body">O setor compete por função, não por estética. O visual premium verde/dourado e o vídeo de apresentação reforçam a percepção de "produto caro vendido barato". Nenhum concorrente tem identidade visual memorável.</div>
+        <div class="opp-meta">
+          <div class="opp-tag">Branding</div>
+          <div class="opp-tag">Conversão</div>
+        </div>
+        <div class="opp-bars">
+          <div class="opp-bar-row"><span>Impacto</span><div class="opp-bar"><div class="opp-fill" style="width:80%;background:var(--green)"></div></div></div>
+          <div class="opp-bar-row"><span>Esforço</span><div class="opp-bar"><div class="opp-fill" style="width:30%;background:var(--gold)"></div></div></div>
+        </div>
+      </div>
+
+      <div class="opp-card">
+        <div class="opp-header">
+          <div class="opp-num">04</div>
+          <span class="opp-badge media">Média prioridade</span>
+        </div>
+        <div class="opp-icon">🚪</div>
+        <div class="opp-title">Freemium calibrado no FieldView</div>
+        <div class="opp-body">Com a Bayer já com plano gratuito no mercado, vale acelerar a regra <em>"nome de fazenda genérico grátis vs. customizado pago"</em> como porta de entrada sem custo — e capturar o produtor antes do concorrente.</div>
+        <div class="opp-meta">
+          <div class="opp-tag">Aquisição</div>
+          <div class="opp-tag">Pricing</div>
+        </div>
+        <div class="opp-bars">
+          <div class="opp-bar-row"><span>Impacto</span><div class="opp-bar"><div class="opp-fill" style="width:70%;background:var(--green)"></div></div></div>
+          <div class="opp-bar-row"><span>Esforço</span><div class="opp-bar"><div class="opp-fill" style="width:45%;background:var(--gold)"></div></div></div>
+        </div>
+      </div>
+
+      <div class="opp-card">
+        <div class="opp-header">
+          <div class="opp-num">05</div>
+          <span class="opp-badge media">Média prioridade</span>
+        </div>
+        <div class="opp-icon">📋</div>
+        <div class="opp-title">Dores documentadas do Aegro</div>
+        <div class="opp-body">Estoque simples e bem-feito; suporte que responde no fim de semana — as reclamações públicas do Aegro no Capterra (61 avaliações) são o roteiro exato do backlog do AgroDigital.</div>
+        <div class="opp-meta">
+          <div class="opp-tag">Produto</div>
+          <div class="opp-tag">Suporte</div>
+          <div class="opp-tag">Retenção</div>
+        </div>
+        <div class="opp-bars">
+          <div class="opp-bar-row"><span>Impacto</span><div class="opp-bar"><div class="opp-fill" style="width:75%;background:var(--green)"></div></div></div>
+          <div class="opp-bar-row"><span>Esforço</span><div class="opp-bar"><div class="opp-fill" style="width:55%;background:var(--gold)"></div></div></div>
+        </div>
+      </div>
+
+      <div class="opp-card">
+        <div class="opp-header">
+          <div class="opp-num">06</div>
+          <span class="opp-badge roadmap">Roadmap</span>
+        </div>
+        <div class="opp-icon">📡</div>
+        <div class="opp-title">Modo offline no campo</div>
+        <div class="opp-body">Única lacuna crítica do AgroDigital frente a Aegro e FieldView. Conectividade rural falha com frequência — caderno de campo offline é decisivo na renovação da assinatura anual.</div>
+        <div class="opp-meta">
+          <div class="opp-tag">Produto</div>
+          <div class="opp-tag">Retenção</div>
+          <div class="opp-tag">Mobile</div>
+        </div>
+        <div class="opp-bars">
+          <div class="opp-bar-row"><span>Impacto</span><div class="opp-bar"><div class="opp-fill" style="width:85%;background:var(--green)"></div></div></div>
+          <div class="opp-bar-row"><span>Esforço</span><div class="opp-bar"><div class="opp-fill" style="width:80%;background:var(--gold)"></div></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Matriz esforço × impacto -->
+    <h2>Matriz esforço × impacto</h2>
+    <div class="matrix-wrap">
+      <div class="matrix">
+        <!-- Eixos -->
+        <div class="m-axis-y">↑ Impacto</div>
+        <div class="m-axis-x">Esforço →</div>
+        <!-- Quadrantes -->
+        <div class="m-quad q1">
+          <div class="q-label">Faça agora</div>
+          <div class="m-dot" style="left:15%;top:10%">
+            <div class="m-dot-inner alta"></div>
+            <div class="m-tooltip">01 · Preço Aegro</div>
+          </div>
+          <div class="m-dot" style="left:30%;top:20%">
+            <div class="m-dot-inner alta"></div>
+            <div class="m-tooltip">03 · Design</div>
+          </div>
+        </div>
+        <div class="m-quad q2">
+          <div class="q-label">Planeje bem</div>
+          <div class="m-dot" style="left:60%;top:15%">
+            <div class="m-dot-inner alta"></div>
+            <div class="m-tooltip">02 · Chatbot IA</div>
+          </div>
+          <div class="m-dot" style="left:80%;top:25%">
+            <div class="m-dot-inner roadmap"></div>
+            <div class="m-tooltip">06 · Offline</div>
+          </div>
+        </div>
+        <div class="m-quad q3">
+          <div class="q-label">Preenche agenda</div>
+          <div class="m-dot" style="left:25%;top:55%">
+            <div class="m-dot-inner media"></div>
+            <div class="m-tooltip">04 · Freemium</div>
+          </div>
+        </div>
+        <div class="m-quad q4">
+          <div class="q-label">Avalie com cuidado</div>
+          <div class="m-dot" style="left:55%;top:45%">
+            <div class="m-dot-inner media"></div>
+            <div class="m-tooltip">05 · Dores Aegro</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pitch -->
+    <h2>Mensagem-síntese para a apresentação</h2>
+    <div class="callout pitch">
+      <div class="k">✦ Elevator pitch competitivo</div>
+      <p><em>"Entre o Aegro, que é completo mas caro, e o FieldView, que é barato mas só olha o talhão, o <b>AgroDigital é a gestão inteira da fazenda</b> — clima, solo, satélite, financeiro e maquinário — pelo preço de um jantar por mês, com o design mais bonito do mercado e um assistente de IA que responde sobre a sua fazenda."</em></p>
+    </div>
+
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer>
+    Fontes consultadas em 10/07/2026:
+    <a href="https://aegro.com.br" target="_blank">aegro.com.br</a> ·
+    Capterra (Aegro, 61 avaliações) ·
+    <a href="https://solinftec.com/pt-br" target="_blank">solinftec.com/pt-br</a> ·
+    Forbes Agro (abr/2026) ·
+    <a href="https://agrotools.com.br" target="_blank">agrotools.com.br</a> ·
+    <a href="https://climate.com/pt-br" target="_blank">climate.com/pt-br</a> (Plano Plus) ·
+    Comparativo MBais.
+    Preços "sob consulta" não são divulgados publicamente pelas empresas.
+  </footer>
+
+</div>
+
+<script>
+  const tabs   = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x   => x.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }));
+</script>
+</body>
+</html>

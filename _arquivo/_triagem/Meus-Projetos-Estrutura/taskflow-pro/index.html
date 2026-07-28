@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskFlow Pro</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <span class="logo-icon">⚡</span>
+    <span class="logo-text">TaskFlow<span class="pro-badge">PRO</span></span>
+  </div>
+
+  <nav class="nav">
+    <a href="#" class="nav-item active" onclick="navegarPara('dashboard',this)">
+      <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
+    </a>
+    <a href="#" class="nav-item" onclick="navegarPara('relatorio',this)">
+      <span class="nav-icon">📈</span><span class="nav-label">Relatórios</span>
+    </a>
+    <a href="#" class="nav-item" onclick="navegarPara('planos',this)">
+      <span class="nav-icon">💎</span><span class="nav-label">Planos</span>
+    </a>
+  </nav>
+
+  <div class="plano-info" id="plano-info">
+    <div class="plano-nome" id="plano-nome-sidebar">Plano Grátis</div>
+    <div class="plano-uso">
+      <span id="uso-tarefas">0</span>/5 tarefas
+    </div>
+    <div class="plano-bar"><div class="plano-fill" id="plano-fill"></div></div>
+    <button class="btn-upgrade" onclick="navegarPara('planos', document.querySelector('.nav-item:nth-child(3)'))">
+      Fazer Upgrade ⚡
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-avatar" id="user-avatar">JS</div>
+    <div class="user-info">
+      <p class="user-name" id="user-name-display">João Silva</p>
+      <p class="user-role" id="user-plan-display">Plano Grátis</p>
+    </div>
+    <button class="btn-logout" onclick="fazerLogout()" title="Sair">↩</button>
+  </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <h1 class="page-title" id="page-title">Dashboard</h1>
+      <p class="page-sub" id="data-atual"></p>
+    </div>
+    <div class="topbar-right">
+      <div class="clock" id="relogio"></div>
+      <button class="btn-add" onclick="abrirModal()" id="btn-nova-tarefa">+ Nova Tarefa</button>
+    </div>
+  </header>
+
+  <!-- ===== PÁGINA: DASHBOARD ===== -->
+  <section id="page-dashboard" class="page active">
+
+    <!-- KPIs -->
+    <div class="cards-grid">
+      <div class="card kpi">
+        <div class="kpi-icon">📋</div>
+        <div class="kpi-label">Total de Tarefas</div>
+        <div class="kpi-value" id="kpi-total">0</div>
+        <div class="kpi-bar"><div class="kpi-fill" style="width:100%;background:#6366f1"></div></div>
+      </div>
+      <div class="card kpi">
+        <div class="kpi-icon">✅</div>
+        <div class="kpi-label">Concluídas</div>
+        <div class="kpi-value" id="kpi-concluidas">0</div>
+        <div class="kpi-bar"><div class="kpi-fill" id="bar-conc" style="background:#22c55e"></div></div>
+      </div>
+      <div class="card kpi">
+        <div class="kpi-icon">⏳</div>
+        <div class="kpi-label">Pendentes</div>
+        <div class="kpi-value" id="kpi-pendentes">0</div>
+        <div class="kpi-bar"><div class="kpi-fill" id="bar-pend" style="background:#f59e0b"></div></div>
+      </div>
+      <div class="card kpi">
+        <div class="kpi-icon">🔴</div>
+        <div class="kpi-label">Alta Prioridade</div>
+        <div class="kpi-value" id="kpi-alta">0</div>
+        <div class="kpi-bar"><div class="kpi-fill" id="bar-alta" style="background:#ef4444"></div></div>
+      </div>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="content-grid">
+      <!-- LISTA -->
+      <div class="card lista-card">
+        <div class="card-header">
+          <h2>Tarefas de Hoje</h2>
+          <div class="filter-tabs">
+            <button class="tab active" onclick="filtrar('todas',this)">Todas</button>
+            <button class="tab" onclick="filtrar('pendente',this)">Pendentes</button>
+            <button class="tab" onclick="filtrar('concluida',this)">Concluídas</button>
+          </div>
+        </div>
+        <ul class="task-list" id="lista-tarefas"></ul>
+      </div>
+
+      <!-- PAINEL DIREITO -->
+      <div class="side-panel">
+        <!-- Progresso -->
+        <div class="card">
+          <div class="card-header"><h2>Progresso Geral</h2></div>
+          <div class="progress-ring-wrap">
+            <svg viewBox="0 0 120 120" class="ring-svg">
+              <circle cx="60" cy="60" r="50" class="ring-bg"/>
+              <circle cx="60" cy="60" r="50" class="ring-fill" id="ring-fill"/>
+            </svg>
+            <div class="ring-label">
+              <span id="pct-valor">0%</span>
+              <small>concluído</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Freemium bloqueio visual -->
+        <div class="card freemium-card" id="freemium-card">
+          <div class="lock-icon">🔒</div>
+          <p class="lock-title">Relatórios desbloqueados no Pro</p>
+          <p class="lock-sub">Veja gráficos detalhados, histórico semanal e exporte dados.</p>
+          <button class="btn-upgrade-card" onclick="navegarPara('planos', document.querySelector('.nav-item:nth-child(3)'))">
+            Ver Planos
+          </button>
+        </div>
+
+        <!-- Dica -->
+        <div class="card dica-card">
+          <div class="card-header"><h2>💡 Dica</h2></div>
+          <p class="dica-texto" id="dica-texto"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PÁGINA: RELATÓRIOS ===== -->
+  <section id="page-relatorio" class="page">
+    <div class="relatorio-gate" id="relatorio-gate">
+      <div class="gate-icon">📈</div>
+      <h2>Relatórios Avançados</h2>
+      <p>Disponível no plano <strong>Pro</strong> e <strong>Business</strong>.</p>
+      <button class="btn-upgrade" style="margin-top:16px" onclick="navegarPara('planos', document.querySelector('.nav-item:nth-child(3)'))">Ver Planos →</button>
+    </div>
+
+    <div id="relatorio-conteudo" style="display:none">
+      <div class="cards-grid" style="margin-bottom:24px">
+        <div class="card kpi">
+          <div class="kpi-icon">🏆</div>
+          <div class="kpi-label">Taxa de Conclusão</div>
+          <div class="kpi-value" id="rel-taxa">0%</div>
+        </div>
+        <div class="card kpi">
+          <div class="kpi-icon">📅</div>
+          <div class="kpi-label">Tarefas esta semana</div>
+          <div class="kpi-value" id="rel-semana">0</div>
+        </div>
+        <div class="card kpi">
+          <div class="kpi-icon">⚡</div>
+          <div class="kpi-label">Sequência de dias</div>
+          <div class="kpi-value" id="rel-streak">3 dias</div>
+        </div>
+        <div class="card kpi">
+          <div class="kpi-icon">🎯</div>
+          <div class="kpi-label">Meta semanal</div>
+          <div class="kpi-value" id="rel-meta">70%</div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <!-- Gráfico de barras semanal -->
+        <div class="card">
+          <div class="card-header"><h2>Tarefas por Dia (últimos 7 dias)</h2></div>
+          <div class="chart-container">
+            <div class="bar-chart" id="bar-chart"></div>
+            <div class="chart-labels" id="chart-labels"></div>
+          </div>
+        </div>
+
+        <!-- Gráfico pizza por categoria -->
+        <div class="card">
+          <div class="card-header"><h2>Por Categoria</h2></div>
+          <div class="donut-wrap">
+            <svg viewBox="0 0 160 160" class="donut-svg" id="donut-svg"></svg>
+            <div class="donut-legend" id="donut-legend"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela histórico -->
+      <div class="card" style="margin-top:20px">
+        <div class="card-header">
+          <h2>Histórico de Tarefas</h2>
+          <button class="btn-export" onclick="exportarCSV()">⬇ Exportar CSV</button>
+        </div>
+        <table class="hist-table">
+          <thead>
+            <tr><th>Tarefa</th><th>Categoria</th><th>Prioridade</th><th>Status</th></tr>
+          </thead>
+          <tbody id="hist-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PÁGINA: PLANOS ===== -->
+  <section id="page-planos" class="page">
+    <div class="planos-hero">
+      <h2 class="planos-titulo">Escolha seu plano</h2>
+      <p class="planos-sub">Comece grátis. Escale quando precisar.</p>
+    </div>
+
+    <div class="planos-grid">
+      <!-- GRÁTIS -->
+      <div class="plano-card" id="plano-gratis">
+        <div class="plano-tag">Grátis para sempre</div>
+        <h3 class="plano-nome">Free</h3>
+        <div class="plano-preco">R$ 0<span>/mês</span></div>
+        <ul class="plano-features">
+          <li>✅ Até 5 tarefas</li>
+          <li>✅ Dashboard básico</li>
+          <li>✅ Relógio e dicas</li>
+          <li>❌ Relatórios</li>
+          <li>❌ Exportar dados</li>
+          <li>❌ Sem limite de tarefas</li>
+          <li>❌ Suporte prioritário</li>
+        </ul>
+        <button class="btn-plano ativo" id="btn-free" onclick="ativarPlano('free')">
+          Plano atual
+        </button>
+      </div>
+
+      <!-- PRO -->
+      <div class="plano-card destaque" id="plano-pro">
+        <div class="plano-tag popular">⭐ Mais popular</div>
+        <h3 class="plano-nome">Pro</h3>
+        <div class="plano-preco">R$ 29<span>/mês</span></div>
+        <ul class="plano-features">
+          <li>✅ Tarefas ilimitadas</li>
+          <li>✅ Dashboard completo</li>
+          <li>✅ Relatórios com gráficos</li>
+          <li>✅ Exportar CSV</li>
+          <li>✅ Histórico de 30 dias</li>
+          <li>❌ Multi-usuário</li>
+          <li>❌ Suporte prioritário</li>
+        </ul>
+        <button class="btn-plano" id="btn-pro" onclick="ativarPlano('pro')">
+          Assinar Pro
+        </button>
+      </div>
+
+      <!-- BUSINESS -->
+      <div class="plano-card" id="plano-business">
+        <div class="plano-tag">Para equipes</div>
+        <h3 class="plano-nome">Business</h3>
+        <div class="plano-preco">R$ 89<span>/mês</span></div>
+        <ul class="plano-features">
+          <li>✅ Tarefas ilimitadas</li>
+          <li>✅ Dashboard completo</li>
+          <li>✅ Relatórios avançados</li>
+          <li>✅ Exportar CSV e PDF</li>
+          <li>✅ Histórico ilimitado</li>
+          <li>✅ Até 10 usuários</li>
+          <li>✅ Suporte prioritário</li>
+        </ul>
+        <button class="btn-plano" id="btn-business" onclick="ativarPlano('business')">
+          Assinar Business
+        </button>
+      </div>
+    </div>
+
+    <p class="planos-nota">* Demonstração local — integre com Stripe ou Pagar.me para cobranças reais.</p>
+  </section>
+
+</main>
+
+<!-- MODAL NOVA TAREFA -->
+<div class="modal-overlay" id="modal" onclick="fecharModalFora(event)">
+  <div class="modal">
+    <h2>Nova Tarefa</h2>
+    <label>Título</label>
+    <input type="text" id="input-titulo" placeholder="Descreva a tarefa..."/>
+    <label>Categoria</label>
+    <select id="input-categoria">
+      <option>Trabalho</option>
+      <option>Pessoal</option>
+      <option>Urgente</option>
+      <option>Estudo</option>
+      <option>Financeiro</option>
+      <option>Saúde</option>
+    </select>
+    <label>Prioridade</label>
+    <select id="input-prioridade">
+      <option value="alta">🔴 Alta</option>
+      <option value="media">🟡 Média</option>
+      <option value="baixa">🟢 Baixa</option>
+    </select>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-save" onclick="adicionarTarefa()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

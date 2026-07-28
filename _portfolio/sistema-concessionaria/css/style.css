@@ -1,0 +1,80 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+header {
+  background: #1e293b;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #F97316;
+}
+
+header h1 {
+  color: #F97316;
+  font-size: 1.5rem;
+}
+
+nav a {
+  color: #e2e8f0;
+  text-decoration: none;
+  margin-left: 1.5rem;
+  font-size: 0.95rem;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+nav a:hover {
+  background: #F97316;
+  color: #fff;
+}
+
+main {
+  padding: 2rem;
+}
+
+h2 {
+  color: #F97316;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.card {
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-left: 4px solid #F97316;
+}
+
+.card-icon {
+  font-size: 2rem;
+  color: #F97316;
+}
+
+.card-label {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 0.3rem;
+}
+
+.card-valor {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}

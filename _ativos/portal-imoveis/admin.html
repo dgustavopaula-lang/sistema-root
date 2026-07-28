@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Portal Imobiliário Premium</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+<link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+<header>
+  <h1><i class="ri-building-2-line"></i> Área Administrativa</h1>
+  <p>Portal Imobiliário Premium — Cadastro de Imóveis</p>
+  <a href="index.html" class="link-vitrine"><i class="ri-external-link-line"></i> Ver vitrine pública</a>
+</header>
+
+<main>
+  <section class="form-card">
+    <h2>Cadastrar Imóvel</h2>
+    <form id="formImovel">
+      <input type="text" id="nome" placeholder="Nome (ex: Imóvel Residencial 03)" required>
+      <input type="text" id="localizacao" placeholder="Localização (ex: Uberlândia - MG)" required>
+      <select id="tipo" required>
+        <option value="">Tipo</option>
+        <option value="casa">Casa</option>
+        <option value="apartamento">Apartamento</option>
+        <option value="terreno">Terreno</option>
+        <option value="comercial">Comercial</option>
+        <option value="rural">Rural</option>
+      </select>
+      <input type="number" id="tamanho" placeholder="Tamanho (m²)">
+      <input type="number" id="valorVenda" placeholder="Valor de venda (R$)" required>
+      <input type="number" id="valorAluguel" placeholder="Valor de aluguel (R$) - opcional">
+      <select id="status" required>
+        <option value="disponivel">Disponível</option>
+        <option value="alugado">Alugado</option>
+        <option value="vendido">Vendido</option>
+      </select>
+      <textarea id="descricao" placeholder="Descrição (ex: Excelente região, segurança e infraestrutura)"></textarea>
+      <button type="submit"><i class="ri-add-line"></i> Cadastrar Imóvel</button>
+    </form>
+  </section>
+
+  <section class="lista-card">
+    <h2>Imóveis Cadastrados (<span id="contador">0</span>)</h2>
+    <div id="listaImoveis"></div>
+  </section>
+</main>
+
+<script src="admin-script.js"></script>
+</body>
+</html>

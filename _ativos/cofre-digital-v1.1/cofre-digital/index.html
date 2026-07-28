@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cofre Digital - Gerenciador de Senhas Seguro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app"></div>
+
+    <!-- TELA DE LOGIN -->
+    <div id="telaLogin" class="container">
+        <div class="login-box">
+            <div class="logo">
+                <span class="icon-lock">🔐</span>
+            </div>
+            <h1>Cofre Digital</h1>
+            <p class="subtitulo">Gerenciador de Senhas Seguro</p>
+            
+            <div id="loginContent">
+                <form id="formLogin" onsubmit="handleLogin(event)" autocomplete="off">
+                    <div class="form-group">
+                        <label for="senhaMestre">Senha Mestra</label>
+                        <input 
+                            type="password" 
+                            id="senhaMestre" 
+                            placeholder="Digite sua senha mestra"
+                            autocomplete="off"
+                            data-lpignore="true"
+                            data-1p-ignore="true"
+                            required
+                        >
+                    </div>
+                    <button type="submit" class="btn-primary">Acessar Cofre</button>
+                </form>
+                
+                <div id="erroLogin" class="erro" style="display: none;">
+                    Senha mestra incorreta!
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Primeira vez?</strong></p>
+                    <p>Crie uma senha mestra forte. Ela é a chave para acessar todas as suas senhas.</p>
+                    <button type="button" class="btn-secondary" onclick="toggleCriarCofre()">
+                        Criar Novo Cofre
+                    </button>
+                </div>
+            </div>
+
+            <div id="criarCofreContent" style="display: none;">
+                <form id="formCriarCofre" onsubmit="handleCriarCofre(event)" autocomplete="off">
+                    <div class="form-group">
+                        <label for="novaSenhaMestre">Crie uma Senha Mestra</label>
+                        <input 
+                            type="password" 
+                            id="novaSenhaMestre" 
+                            placeholder="Mínimo 8 caracteres"
+                            minlength="8"
+                            autocomplete="new-password"
+                            data-lpignore="true"
+                            data-1p-ignore="true"
+                            required
+                        >
+                        <small>Use letras, números e símbolos para maior segurança</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmaSenhaMestre">Confirme a Senha Mestra</label>
+                        <input 
+                            type="password" 
+                            id="confirmaSenhaMestre" 
+                            placeholder="Repita sua senha mestra"
+                            minlength="8"
+                            autocomplete="new-password"
+                            data-lpignore="true"
+                            data-1p-ignore="true"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="btn-primary">Criar Cofre</button>
+                </form>
+
+                <button type="button" class="btn-secondary" onclick="toggleCriarCofre()">
+                    Voltar
+                </button>
+
+                <div id="erroCreateCofre" class="erro" style="display: none;">
+                    As senhas não correspondem!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA DO DASHBOARD (COFRE) -->
+    <div id="telaDashboard" class="dashboard" style="display: none;">
+        <header class="navbar">
+            <div class="navbar-content">
+                <h1 class="navbar-title">🔐 Cofre Digital</h1>
+                <div class="navbar-actions">
+                    <span class="contador">
+                        <span id="countSenhas">0</span>/<span id="maxSenhas">5</span> senhas
+                    </span>
+                    <button class="btn-icon" title="Exportar Backup" onclick="exportarBackup()">
+                        📥
+                    </button>
+                    <button class="btn-icon" title="Importar Backup" onclick="document.getElementById('inputImport').click()">
+                        📤
+                    </button>
+                    <input id="inputImport" type="file" style="display: none;" accept=".json" onchange="importarBackup(event)">
+                    <button class="btn-icon" title="Sair" onclick="logout()">
+                        🚪
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container-dashboard">
+                <!-- SEÇÃO: ADICIONAR NOVA SENHA -->
+                <section class="card adicionar-senha">
+                    <h2>➕ Adicionar Nova Senha</h2>
+                    <form id="formNovasenha" onsubmit="handleAdicionarSenha(event)" autocomplete="off">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="servico">Serviço/Conta</label>
+                                <input 
+                                    type="text" 
+                                    id="servico" 
+                                    placeholder="Ex: Gmail, Banco do Brasil"
+                                    required
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="usuario">Usuário/Email</label>
+                                <input 
+                                    type="text" 
+                                    id="usuario" 
+                                    placeholder="Ex: seu.email@gmail.com"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="novaSenha">Senha</label>
+                                <div class="password-input-group">
+                                    <input 
+                                        type="password" 
+                                        id="novaSenha" 
+                                        placeholder="Digite ou gere uma senha"
+                                        autocomplete="new-password"
+                                        data-lpignore="true"
+                                        data-1p-ignore="true"
+                                        required
+                                    >
+                                    <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('novaSenha')">
+                                        👁️
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button type="button" class="btn-secondary" onclick="gerarSenhaForte()">
+                                    🔄 Gerar Senha
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notas">Notas (opcional)</label>
+                            <textarea 
+                                id="notas" 
+                                placeholder="Ex: Última alteração em 2026-07"
+                                rows="2"
+                            ></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Guardar Senha</button>
+                        <div id="erroAdicionar" class="erro" style="display: none;"></div>
+                    </form>
+                </section>
+
+                <!-- SEÇÃO: LISTA DE SENHAS -->
+                <section class="card lista-senhas">
+                    <h2>📋 Senhas Guardadas</h2>
+                    <div id="listaSenhas" class="senhas-container">
+                        <p class="sem-senhas">Nenhuma senha guardada ainda. Adicione sua primeira senha acima!</p>
+                    </div>
+                </section>
+
+                <!-- PLANO FREEMIUM -->
+                <section class="card plano-info">
+                    <h2>📊 Seu Plano Atual</h2>
+                    <div class="plano-content">
+                        <div class="plano-badge">GRATUITO</div>
+                        <div class="plano-limites">
+                            <p>✅ Até 5 senhas</p>
+                            <p>✅ Armazenamento local seguro</p>
+                            <p>✅ Gerador de senhas fortes</p>
+                            <p>✅ Exportar/Importar backup</p>
+                            <p class="premium-only">🔒 Premium: Sincronização em nuvem, ilimitado de senhas, 2FA</p>
+                        </div>
+                        <button class="btn-upgrade">Upgrade para Premium (em breve)</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

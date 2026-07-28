@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema Root · SIBO/SIFO — Marcadores</title>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f172a;
+    --bg-card:#151f38;
+    --bg-card-hover:#1a2540;
+    --border:#1e2a47;
+    --orange:#F97316;
+    --orange-dim:rgba(249,115,22,0.15);
+    --text:#e2e8f0;
+    --text-dim:#94a3b8;
+    --text-faint:#64748b;
+    --green:#22c55e;
+    --red:#ef4444;
+    --yellow:#eab308;
+    --blue:#3b82f6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh;}
+  .app{display:flex;min-height:100vh;}
+
+  .sidebar{width:250px;background:var(--bg-card);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;gap:4px;}
+  .brand{display:flex;align-items:center;gap:10px;padding:0 8px 24px 8px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+  .brand-icon{width:36px;height:36px;border-radius:8px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:20px;color:#0f172a;}
+  .brand-text h1{font-size:15px;font-weight:700;color:var(--text);}
+  .brand-text span{font-size:11px;color:var(--text-faint);}
+  .nav-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:8px;color:var(--text-dim);text-decoration:none;font-size:14px;cursor:pointer;transition:.15s;border:1px solid transparent;}
+  .nav-item i{font-size:18px;width:20px;text-align:center;}
+  .nav-item:hover{background:var(--bg-card-hover);color:var(--text);}
+  .nav-item.active{background:var(--orange-dim);color:var(--orange);border-color:rgba(249,115,22,0.3);font-weight:600;}
+  .nav-section-label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);padding:16px 12px 6px 12px;}
+  .sidebar-footer{margin-top:auto;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-faint);}
+
+  .main{flex:1;padding:28px 32px;overflow-x:hidden;max-width:1400px;}
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:16px;}
+  .topbar h2{font-size:22px;font-weight:700;}
+  .topbar p{color:var(--text-dim);font-size:13px;margin-top:4px;}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--orange);color:#0f172a;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;}
+  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-dim);}
+  .btn-outline:hover{border-color:var(--orange);color:var(--orange);}
+
+  .card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+  .card-header h3{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .card-header h3 i{color:var(--orange);}
+
+  /* LEGEND */
+  .legend{display:flex;gap:16px;flex-wrap:wrap;}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-dim);}
+  .legend-dot{width:10px;height:10px;border-radius:3px;}
+
+  /* CHART CARD */
+  .chart-card{margin-bottom:24px;}
+  .chart-wrap{width:100%;overflow-x:auto;}
+  .chart-svg{width:100%;height:280px;min-width:600px;}
+  .axis-label{font-size:10px;fill:var(--text-faint);}
+  .grid-line{stroke:var(--border);stroke-width:1;}
+  .ref-line{stroke:var(--red);stroke-width:1;stroke-dasharray:4 4;opacity:0.5;}
+
+  /* MARKER SUMMARY GRID */
+  .marker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+  .marker-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px;}
+  .marker-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .marker-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+  .marker-value{font-size:24px;font-weight:800;}
+  .marker-label{font-size:11.5px;color:var(--text-dim);margin-top:2px;}
+  .marker-status{font-size:10.5px;font-weight:700;margin-top:8px;padding:3px 8px;border-radius:20px;display:inline-block;text-transform:uppercase;}
+  .status-normal{background:rgba(34,197,94,0.15);color:var(--green);}
+  .status-elevated{background:rgba(234,179,8,0.15);color:var(--yellow);}
+  .status-high{background:rgba(239,68,68,0.15);color:var(--red);}
+
+  /* TABLE HISTORY */
+  .hist-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .hist-table th{
+    text-align:left;padding:10px 12px;color:var(--text-faint);font-weight:600;font-size:11px;
+    text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid var(--border);
+  }
+  .hist-table td{padding:12px;border-bottom:1px solid var(--border);color:var(--text-dim);}
+  .hist-table tr:last-child td{border-bottom:none;}
+  .hist-table td.primary{color:var(--text);font-weight:600;}
+  .pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;}
+
+  .disclaimer{
+    display:flex;gap:12px;align-items:flex-start;background:rgba(59,130,246,0.08);
+    border:1px solid rgba(59,130,246,0.3);border-radius:12px;padding:16px 18px;margin:24px 0;
+  }
+  .disclaimer i{color:var(--blue);font-size:20px;margin-top:2px;}
+  .disclaimer p{font-size:12.5px;color:var(--text-dim);line-height:1.6;}
+  .disclaimer strong{color:var(--text);}
+
+  .footer-note{text-align:center;color:var(--text-faint);font-size:11.5px;margin-top:24px;padding-top:16px;border-top:1px solid var(--border);}
+
+  @media(max-width:1000px){
+    .marker-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:700px){
+    .sidebar{display:none;}
+    .marker-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon"><i class="ri-capsule-fill"></i></div>
+      <div class="brand-text">
+        <h1>Sistema Root</h1>
+        <span>SIBO · SIFO Protocol</span>
+      </div>
+    </div>
+
+    <a href="index.html" class="nav-item"><i class="ri-dashboard-3-line"></i> Dashboard</a>
+    <a href="suplementacao.html" class="nav-item"><i class="ri-capsule-line"></i> Suplementação</a>
+    <a href="alimentacao.html" class="nav-item"><i class="ri-restaurant-line"></i> Alimentação</a>
+    <div class="nav-item"><i class="ri-line-chart-line"></i> Progresso</div>
+    <a href="marcadores.html" class="nav-item active"><i class="ri-test-tube-line"></i> Marcadores SIBO/SIFO</a>
+
+    <div class="nav-section-label">Clínica</div>
+    <div class="nav-item"><i class="ri-user-heart-line"></i> Pacientes</div>
+    <div class="nav-item"><i class="ri-file-chart-line"></i> Relatórios</div>
+    <div class="nav-item"><i class="ri-settings-3-line"></i> Configurações</div>
+
+    <div class="sidebar-footer">
+      Gustavo Paula dos Santos<br>
+      Pesquisador · Escritor · GPS.dev
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h2>Marcadores SIBO/SIFO</h2>
+        <p>Evolução dos exames respiratórios e sintomas ao longo do tratamento</p>
+      </div>
+      <button class="btn btn-outline"><i class="ri-add-line"></i> Registrar novo exame</button>
+    </div>
+
+    <!-- RESUMO ATUAL -->
+    <div class="marker-grid">
+      <div class="marker-card">
+        <div class="marker-top">
+          <div class="marker-icon" style="background:rgba(234,179,8,0.15);color:var(--yellow);"><i class="ri-flask-line"></i></div>
+        </div>
+        <div class="marker-value">32 ppm</div>
+        <div class="marker-label">Hidrogênio (H2)</div>
+        <span class="marker-status status-elevated">Elevado</span>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div class="marker-icon" style="background:rgba(34,197,94,0.15);color:var(--green);"><i class="ri-flask-line"></i></div>
+        </div>
+        <div class="marker-value">8 ppm</div>
+        <div class="marker-label">Metano (CH4)</div>
+        <span class="marker-status status-normal">Normal</span>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div class="marker-icon" style="background:rgba(34,197,94,0.15);color:var(--green);"><i class="ri-heart-pulse-line"></i></div>
+        </div>
+        <div class="marker-value">Leve</div>
+        <div class="marker-label">Distensão abdominal</div>
+        <span class="marker-status status-normal">Melhorando</span>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div class="marker-icon" style="background:rgba(234,179,8,0.15);color:var(--yellow);"><i class="ri-bug-line"></i></div>
+        </div>
+        <div class="marker-value">Moderado</div>
+        <div class="marker-label">Candida (sintomas)</div>
+        <span class="marker-status status-elevated">Observação</span>
+      </div>
+    </div>
+
+    <!-- GRÁFICO DE EVOLUÇÃO -->
+    <div class="card chart-card">
+      <div class="card-header">
+        <h3><i class="ri-line-chart-line"></i>Evolução — teste respiratório H2 / CH4</h3>
+        <div class="legend">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--orange);"></span>Hidrogênio (H2)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--blue);"></span>Metano (CH4)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--red);opacity:.5;"></span>Limiar SIBO (20 ppm)</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <svg class="chart-svg" viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- grid horizontal -->
+          <line class="grid-line" x1="50" y1="20" x2="770" y2="20"/>
+          <line class="grid-line" x1="50" y1="70" x2="770" y2="70"/>
+          <line class="grid-line" x1="50" y1="120" x2="770" y2="120"/>
+          <line class="grid-line" x1="50" y1="170" x2="770" y2="170"/>
+          <line class="grid-line" x1="50" y1="220" x2="770" y2="220"/>
+
+          <!-- eixo Y labels (ppm, invertido: 0 embaixo) -->
+          <text class="axis-label" x="15" y="24">60</text>
+          <text class="axis-label" x="15" y="74">45</text>
+          <text class="axis-label" x="15" y="124">30</text>
+          <text class="axis-label" x="15" y="174">15</text>
+          <text class="axis-label" x="15" y="224">0</text>
+
+          <!-- linha limiar SIBO (20ppm ~ y=153) -->
+          <line class="ref-line" x1="50" y1="153" x2="770" y2="153"/>
+
+          <!-- eixo X labels -->
+          <text class="axis-label" x="50" y="245">12 jun</text>
+          <text class="axis-label" x="185" y="245">26 jun</text>
+          <text class="axis-label" x="320" y="245">10 jul</text>
+          <text class="axis-label" x="455" y="245">24 jul (hoje)</text>
+          <text class="axis-label" x="620" y="245" opacity="0.5">10 ago (previsto)</text>
+
+          <!-- linha H2 (laranja) - valores: 52, 44, 38, 32, (previsto 20) -->
+          <polyline points="50,60 185,90 320,113 455,143" fill="none" stroke="var(--orange)" stroke-width="2.5"/>
+          <polyline points="455,143 720,180" fill="none" stroke="var(--orange)" stroke-width="2" stroke-dasharray="5 5" opacity="0.5"/>
+          <circle cx="50" cy="60" r="4" fill="var(--orange)"/>
+          <circle cx="185" cy="90" r="4" fill="var(--orange)"/>
+          <circle cx="320" cy="113" r="4" fill="var(--orange)"/>
+          <circle cx="455" cy="143" r="5" fill="var(--orange)" stroke="#0f172a" stroke-width="2"/>
+
+          <!-- linha CH4 (azul) - valores: 14, 11, 9, 8, (previsto 6) -->
+          <polyline points="50,183 185,197 320,207 455,213" fill="none" stroke="var(--blue)" stroke-width="2.5"/>
+          <polyline points="455,213 720,223" fill="none" stroke="var(--blue)" stroke-width="2" stroke-dasharray="5 5" opacity="0.5"/>
+          <circle cx="50" cy="183" r="4" fill="var(--blue)"/>
+          <circle cx="185" cy="197" r="4" fill="var(--blue)"/>
+          <circle cx="320" cy="207" r="4" fill="var(--blue)"/>
+          <circle cx="455" cy="213" r="5" fill="var(--blue)" stroke="#0f172a" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- HISTÓRICO DE EXAMES -->
+    <div class="card" style="margin-bottom:24px;">
+      <div class="card-header">
+        <h3><i class="ri-history-line"></i>Histórico de testes</h3>
+      </div>
+      <table class="hist-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>H2 (ppm)</th>
+            <th>CH4 (ppm)</th>
+            <th>Sintomas</th>
+            <th>Interpretação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="primary">12 jun 2026</td>
+            <td>52</td>
+            <td>14</td>
+            <td>Distensão forte, fadiga</td>
+            <td><span class="pill" style="background:rgba(239,68,68,0.15);color:var(--red);">Positivo p/ SIBO-H</span></td>
+          </tr>
+          <tr>
+            <td class="primary">26 jun 2026</td>
+            <td>44</td>
+            <td>11</td>
+            <td>Distensão moderada</td>
+            <td><span class="pill" style="background:rgba(239,68,68,0.15);color:var(--red);">Positivo p/ SIBO-H</span></td>
+          </tr>
+          <tr>
+            <td class="primary">10 jul 2026</td>
+            <td>38</td>
+            <td>9</td>
+            <td>Distensão leve</td>
+            <td><span class="pill" style="background:rgba(234,179,8,0.15);color:var(--yellow);">Em redução</span></td>
+          </tr>
+          <tr>
+            <td class="primary">24 jul 2026 (hoje)</td>
+            <td>32</td>
+            <td>8</td>
+            <td>Distensão leve, clareza mental melhor</td>
+            <td><span class="pill" style="background:rgba(234,179,8,0.15);color:var(--yellow);">Em redução</span></td>
+          </tr>
+          <tr>
+            <td class="primary" style="color:var(--text-faint);">10 ago 2026 (previsto)</td>
+            <td style="color:var(--text-faint);">—</td>
+            <td style="color:var(--text-faint);">—</td>
+            <td style="color:var(--text-faint);">—</td>
+            <td><span class="pill" style="background:var(--border);color:var(--text-faint);">Reteste agendado</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="disclaimer">
+      <i class="ri-information-line"></i>
+      <p>
+        <strong>Sobre a interpretação:</strong> valores de hidrogênio (H2) acima de 20 ppm em relação à linha de base,
+        ou metano (CH4) acima de 10 ppm, são geralmente associados a SIBO conforme critérios do consenso norte-americano
+        de teste respiratório. A tendência de queda demonstrada aqui é favorável, mas a interpretação clínica final e
+        qualquer ajuste terapêutico devem ser sempre validados pelo médico responsável.
+      </p>
+    </div>
+
+    <div class="footer-note">
+      sistema-root-sibo-sifo · módulo Marcadores v0.1 · Projeto de iniciativa própria — Gustavo Paula dos Santos, Pesquisador e Escritor
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

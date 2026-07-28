@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema Root · SIBO/SIFO — Alimentação</title>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f172a;
+    --bg-card:#151f38;
+    --bg-card-hover:#1a2540;
+    --border:#1e2a47;
+    --orange:#F97316;
+    --orange-dim:rgba(249,115,22,0.15);
+    --text:#e2e8f0;
+    --text-dim:#94a3b8;
+    --text-faint:#64748b;
+    --green:#22c55e;
+    --red:#ef4444;
+    --yellow:#eab308;
+    --blue:#3b82f6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    min-height:100vh;
+  }
+  .app{display:flex;min-height:100vh;}
+
+  /* SIDEBAR (idêntica ao dashboard) */
+  .sidebar{
+    width:250px;background:var(--bg-card);border-right:1px solid var(--border);
+    padding:24px 16px;display:flex;flex-direction:column;gap:4px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;padding:0 8px 24px 8px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+  .brand-icon{width:36px;height:36px;border-radius:8px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:20px;color:#0f172a;}
+  .brand-text h1{font-size:15px;font-weight:700;color:var(--text);}
+  .brand-text span{font-size:11px;color:var(--text-faint);}
+  .nav-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:8px;color:var(--text-dim);text-decoration:none;font-size:14px;cursor:pointer;transition:.15s;border:1px solid transparent;}
+  .nav-item i{font-size:18px;width:20px;text-align:center;}
+  .nav-item:hover{background:var(--bg-card-hover);color:var(--text);}
+  .nav-item.active{background:var(--orange-dim);color:var(--orange);border-color:rgba(249,115,22,0.3);font-weight:600;}
+  .nav-section-label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);padding:16px 12px 6px 12px;}
+  .sidebar-footer{margin-top:auto;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-faint);}
+
+  /* MAIN */
+  .main{flex:1;padding:28px 32px;overflow-x:hidden;max-width:1400px;}
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:16px;}
+  .topbar h2{font-size:22px;font-weight:700;}
+  .topbar p{color:var(--text-dim);font-size:13px;margin-top:4px;}
+
+  .source-banner{
+    display:flex;gap:12px;align-items:flex-start;
+    background:linear-gradient(135deg, var(--orange-dim), transparent);
+    border:1px solid rgba(249,115,22,0.3);border-radius:12px;
+    padding:16px 18px;margin:20px 0 28px 0;
+  }
+  .source-banner i{color:var(--orange);font-size:20px;margin-top:2px;}
+  .source-banner p{font-size:12.5px;color:var(--text-dim);line-height:1.6;}
+  .source-banner strong{color:var(--text);}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--orange);color:#0f172a;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s;}
+  .btn:hover{background:#ea6a0c;}
+  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-dim);}
+  .btn-outline:hover{border-color:var(--orange);color:var(--orange);}
+
+  .card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .card-header h3{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .card-header h3 i{color:var(--orange);}
+
+  /* CONTADOR DE CARBOIDRATO LÍQUIDO */
+  .carb-tracker{
+    display:grid;grid-template-columns:280px 1fr;gap:20px;margin-bottom:24px;
+  }
+  .carb-gauge{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:8px;padding:20px;
+  }
+  .gauge-ring{
+    width:160px;height:160px;border-radius:50%;
+    background:conic-gradient(var(--orange) 0% 53%, var(--border) 53% 100%);
+    display:flex;align-items:center;justify-content:center;position:relative;
+  }
+  .gauge-ring::before{
+    content:'';position:absolute;width:130px;height:130px;border-radius:50%;background:var(--bg-card);
+  }
+  .gauge-inner{position:relative;text-align:center;}
+  .gauge-value{font-size:28px;font-weight:800;color:var(--orange);}
+  .gauge-label{font-size:11px;color:var(--text-faint);}
+  .gauge-limit{font-size:12px;color:var(--text-dim);margin-top:8px;}
+
+  .meal-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;
+  }
+  .meal-row:last-child{border-bottom:none;}
+  .meal-name{color:var(--text);font-weight:600;}
+  .meal-time{color:var(--text-faint);font-size:11px;margin-left:8px;}
+  .meal-carb{display:flex;align-items:center;gap:8px;}
+  .meal-carb strong{font-size:13px;}
+  .meal-status{width:8px;height:8px;border-radius:50%;}
+  .status-ok{background:var(--green);}
+  .status-limit{background:var(--yellow);}
+  .status-over{background:var(--red);}
+
+  /* GRID DE ALIMENTOS */
+  .food-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;}
+  .food-col-header{
+    display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;
+    margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);
+  }
+  .food-col-header.allow{color:var(--green);}
+  .food-col-header.avoid{color:var(--red);}
+  .food-item{
+    display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px;color:var(--text-dim);
+  }
+  .food-item i{font-size:15px;flex-shrink:0;}
+  .food-item.allow i{color:var(--green);}
+  .food-item.avoid i{color:var(--red);}
+
+  /* PROTOCOLO 4 SEMANAS */
+  .protocol-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+  .week-card{
+    background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px;
+    position:relative;overflow:hidden;
+  }
+  .week-card.current{border-color:var(--orange);}
+  .week-card.current::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--orange);
+  }
+  .week-num{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.5px;font-weight:700;}
+  .week-title{font-size:14px;font-weight:700;margin:6px 0 10px 0;}
+  .week-desc{font-size:12px;color:var(--text-dim);line-height:1.6;}
+  .week-badge{
+    display:inline-block;margin-top:10px;font-size:10px;font-weight:700;padding:3px 8px;
+    border-radius:20px;text-transform:uppercase;background:var(--orange-dim);color:var(--orange);
+  }
+
+  /* IOGURTE L. REUTERI */
+  .yogurt-steps{display:flex;flex-direction:column;gap:10px;}
+  .y-step{display:flex;gap:12px;align-items:flex-start;padding:8px 0;}
+  .y-num{
+    width:24px;height:24px;border-radius:50%;background:var(--orange-dim);color:var(--orange);
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;
+  }
+  .y-text{font-size:12.5px;color:var(--text-dim);line-height:1.5;}
+  .y-text strong{color:var(--text);}
+
+  /* EXAMES */
+  .exam-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .exam-item{
+    background:var(--bg-card-hover);border:1px solid var(--border);border-radius:10px;padding:14px;
+  }
+  .exam-name{font-size:12.5px;font-weight:600;margin-bottom:4px;}
+  .exam-freq{font-size:11px;color:var(--text-faint);}
+
+  /* SINTOMAS */
+  .symptom-row{
+    display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);
+  }
+  .symptom-row:last-child{border-bottom:none;}
+  .symptom-name{font-size:13px;color:var(--text);font-weight:600;}
+  .symptom-note{font-size:11px;color:var(--text-faint);margin-top:2px;}
+  .symptom-scale{display:flex;gap:4px;}
+  .scale-dot{width:16px;height:16px;border-radius:4px;background:var(--border);}
+  .scale-dot.filled{background:var(--orange);}
+
+  .disclaimer{
+    display:flex;gap:12px;align-items:flex-start;background:rgba(239,68,68,0.08);
+    border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:16px 18px;margin:24px 0;
+  }
+  .disclaimer i{color:var(--red);font-size:20px;margin-top:2px;}
+  .disclaimer p{font-size:12.5px;color:var(--text-dim);line-height:1.6;}
+  .disclaimer strong{color:var(--text);}
+
+  .refs{margin-top:24px;padding-top:16px;border-top:1px solid var(--border);}
+  .ref-item{font-size:12px;color:var(--text-faint);margin-bottom:4px;}
+  .ref-item strong{color:var(--text-dim);}
+
+  .footer-note{text-align:center;color:var(--text-faint);font-size:11.5px;margin-top:24px;padding-top:16px;border-top:1px solid var(--border);}
+
+  @media(max-width:1100px){
+    .carb-tracker{grid-template-columns:1fr;}
+    .food-grid{grid-template-columns:1fr;}
+    .protocol-grid{grid-template-columns:repeat(2,1fr);}
+    .exam-grid{grid-template-columns:1fr;}
+  }
+  @media(max-width:700px){
+    .sidebar{display:none;}
+    .protocol-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon"><i class="ri-capsule-fill"></i></div>
+      <div class="brand-text">
+        <h1>Sistema Root</h1>
+        <span>SIBO · SIFO Protocol</span>
+      </div>
+    </div>
+
+    <a href="index.html" class="nav-item"><i class="ri-dashboard-3-line"></i> Dashboard</a>
+    <div class="nav-item"><i class="ri-capsule-line"></i> Suplementação</div>
+    <div class="nav-item active"><i class="ri-restaurant-line"></i> Alimentação</div>
+    <div class="nav-item"><i class="ri-line-chart-line"></i> Progresso</div>
+    <div class="nav-item"><i class="ri-test-tube-line"></i> Marcadores SIBO/SIFO</div>
+
+    <div class="nav-section-label">Clínica</div>
+    <div class="nav-item"><i class="ri-user-heart-line"></i> Pacientes</div>
+    <div class="nav-item"><i class="ri-file-chart-line"></i> Relatórios</div>
+    <div class="nav-item"><i class="ri-settings-3-line"></i> Configurações</div>
+
+    <div class="sidebar-footer">
+      Gustavo Paula dos Santos<br>
+      Pesquisador · Escritor · GPS.dev
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h2>Alimentação — Protocolo Sem Trigo</h2>
+        <p>Restauração intestinal por meio da alimentação · controle de carboidrato líquido</p>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-outline"><i class="ri-file-list-3-line"></i> Registrar refeição</button>
+        <button class="btn"><i class="ri-add-line"></i> Novo exame</button>
+      </div>
+    </div>
+
+    <div class="source-banner">
+      <i class="ri-book-open-line"></i>
+      <p>
+        Protocolo fundamentado em <strong>Barriga de Trigo</strong> e <strong>Super Intestino</strong>,
+        de William Davis, M.D. O autor defende que o trigo moderno e o glúten estão associados a uma ampla gama
+        de condições inflamatórias — e que a restauração da microbiota intestinal (o "segundo cérebro") por meio
+        de cepas específicas de bactérias, alimentação sem trigo e produtos orgânicos pode reverter parte
+        significativa dos danos causados pela alimentação industrializada atual.
+      </p>
+    </div>
+
+    <!-- CONTADOR DE CARBOIDRATO LÍQUIDO -->
+    <div class="card carb-tracker">
+      <div class="carb-gauge">
+        <div class="gauge-ring">
+          <div class="gauge-inner">
+            <div class="gauge-value">8g</div>
+            <div class="gauge-label">nesta refeição</div>
+          </div>
+        </div>
+        <div class="gauge-limit">Limite: <strong style="color:var(--orange);">15g líquido / refeição</strong></div>
+      </div>
+
+      <div>
+        <div class="card-header" style="margin-bottom:8px;">
+          <h3><i class="ri-restaurant-2-line"></i>Refeições de hoje</h3>
+          <a class="btn-outline" style="font-size:11px;padding:6px 12px;border-radius:6px;cursor:pointer;">ver histórico</a>
+        </div>
+        <div class="meal-row">
+          <div><span class="meal-name">Café da manhã</span><span class="meal-time">07:20</span></div>
+          <div class="meal-carb"><span class="meal-status status-ok"></span><strong>6g</strong></div>
+        </div>
+        <div class="meal-row">
+          <div><span class="meal-name">Almoço</span><span class="meal-time">12:40</span></div>
+          <div class="meal-carb"><span class="meal-status status-ok"></span><strong>8g</strong></div>
+        </div>
+        <div class="meal-row">
+          <div><span class="meal-name">Lanche da tarde</span><span class="meal-time">—</span></div>
+          <div class="meal-carb"><span class="meal-status status-limit"></span><strong>pendente</strong></div>
+        </div>
+        <div class="meal-row">
+          <div><span class="meal-name">Jantar</span><span class="meal-time">—</span></div>
+          <div class="meal-carb"><span class="meal-status status-limit"></span><strong>pendente</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTA DE ALIMENTOS -->
+    <div class="card food-grid">
+      <div>
+        <div class="food-col-header allow"><i class="ri-checkbox-circle-fill"></i> Priorizar</div>
+        <div class="food-item allow"><i class="ri-leaf-line"></i> Vegetais folhosos orgânicos (couve, rúcula, espinafre)</div>
+        <div class="food-item allow"><i class="ri-leaf-line"></i> Legumes de baixo carboidrato (abobrinha, brócolis, couve-flor)</div>
+        <div class="food-item allow"><i class="ri-drop-line"></i> Azeite de oliva extra virgem, óleo de coco</div>
+        <div class="food-item allow"><i class="ri-egg-line"></i> Ovos caipiras / orgânicos</div>
+        <div class="food-item allow"><i class="ri-fish-line"></i> Peixes e carnes de origem rastreável</div>
+        <div class="food-item allow"><i class="ri-seedling-line"></i> Oleaginosas cruas (castanhas, nozes, amêndoas)</div>
+        <div class="food-item allow"><i class="ri-cup-line"></i> Iogurte fermentado de L. reuteri (caseiro)</div>
+        <div class="food-item allow"><i class="ri-water-flash-line"></i> Água, chás sem açúcar</div>
+      </div>
+      <div>
+        <div class="food-col-header avoid"><i class="ri-close-circle-fill"></i> Eliminar</div>
+        <div class="food-item avoid"><i class="ri-close-line"></i> Trigo em qualquer forma (pão, massa, biscoito, farinha)</div>
+        <div class="food-item avoid"><i class="ri-close-line"></i> Glúten (cevada, centeio, malte)</div>
+        <div class="food-item avoid"><i class="ri-close-line"></i> Açúcar refinado e adoçantes artificiais</div>
+        <div class="food-item avoid"><i class="ri-close-line"></i> Alimentos ultraprocessados em geral</div>
+        <div class="food-item avoid"><i class="ri-close-line"></i> Proteínas em pó com açúcar/maltodextrina</div>
+        <div class="food-item avoid"><i class="ri-close-line"></i> Óleos vegetais refinados (soja, canola industrial)</div>
+        <div class="food-item avoid"><i class="ri-close-line"></i> Refrigerantes e sucos industrializados</div>
+        <div class="food-item avoid"><i class="ri-close-line"></i> Produtos "sem glúten" industrializados com amido/açúcar</div>
+      </div>
+    </div>
+
+    <!-- PROTOCOLO DE 4 SEMANAS -->
+    <div class="card" style="margin-bottom:24px;">
+      <div class="card-header">
+        <h3><i class="ri-calendar-2-line"></i>Protocolo de restauração intestinal — 4 semanas</h3>
+      </div>
+      <div class="protocol-grid">
+        <div class="week-card">
+          <div class="week-num">Semana 1</div>
+          <div class="week-title">Eliminação</div>
+          <div class="week-desc">Remoção total de trigo, glúten e açúcar refinado. Início do registro de carboidrato líquido por refeição.</div>
+          <span class="week-badge">concluída</span>
+        </div>
+        <div class="week-card">
+          <div class="week-num">Semana 2</div>
+          <div class="week-title">Antimicrobiano</div>
+          <div class="week-desc">Fitoterápicos para redução de crescimento bacteriano/fúngico excessivo (berberina, orégano), sob orientação médica.</div>
+          <span class="week-badge">concluída</span>
+        </div>
+        <div class="week-card current">
+          <div class="week-num">Semana 3</div>
+          <div class="week-title">Reintrodução de cepas</div>
+          <div class="week-desc">Início do iogurte fermentado de L. reuteri e probióticos multi-cepas selecionados. Observação de reações.</div>
+          <span class="week-badge">em andamento</span>
+        </div>
+        <div class="week-card">
+          <div class="week-num">Semana 4</div>
+          <div class="week-title">Consolidação</div>
+          <div class="week-desc">Reavaliação de sintomas, novo exame de sangue e Vitamina D, ajuste do protocolo para o próximo ciclo.</div>
+          <span class="week-badge" style="background:var(--border);color:var(--text-faint);">planejada</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- IOGURTE L. REUTERI + EXAMES -->
+    <div class="food-grid" style="margin-bottom:24px;">
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="ri-cup-line"></i>Fermentação — Iogurte de L. reuteri</h3>
+        </div>
+        <div class="yogurt-steps">
+          <div class="y-step">
+            <div class="y-num">1</div>
+            <div class="y-text">Dissolver <strong>10 cápsulas de L. reuteri</strong> (cepa específica) em 1 colher de sopa de água filtrada.</div>
+          </div>
+          <div class="y-step">
+            <div class="y-num">2</div>
+            <div class="y-text">Misturar em <strong>1 litro de leite integral orgânico</strong> (ou leite de coco para versão sem lactose) com 2 colheres de sopa de inulina ou açúcar prebiótico.</div>
+          </div>
+          <div class="y-step">
+            <div class="y-num">3</div>
+            <div class="y-text">Fermentar em iogurteira a <strong>36°C por 30–36 horas</strong> — tempo mais longo que iogurte comum, essencial para multiplicação da cepa.</div>
+          </div>
+          <div class="y-step">
+            <div class="y-num">4</div>
+            <div class="y-text">Refrigerar e consumir <strong>2–4 colheres de sopa por dia</strong>, preferencialmente pela manhã.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="ri-test-tube-2-line"></i>Exames de acompanhamento</h3>
+        </div>
+        <div class="exam-grid" style="grid-template-columns:1fr;">
+          <div class="exam-item">
+            <div class="exam-name">Hemograma completo</div>
+            <div class="exam-freq">a cada 8 semanas</div>
+          </div>
+          <div class="exam-item">
+            <div class="exam-name">Vitamina D (25-OH)</div>
+            <div class="exam-freq">a cada 12 semanas</div>
+          </div>
+          <div class="exam-item">
+            <div class="exam-name">Glicemia e insulina em jejum</div>
+            <div class="exam-freq">a cada 12 semanas</div>
+          </div>
+          <div class="exam-item">
+            <div class="exam-name">Teste respiratório H2/CH4 (SIBO)</div>
+            <div class="exam-freq">no início e ao final do ciclo</div>
+          </div>
+          <div class="exam-item">
+            <div class="exam-name">Proteína C-reativa (inflamação)</div>
+            <div class="exam-freq">a cada 12 semanas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SINTOMAS CORRELACIONADOS -->
+    <div class="card" style="margin-bottom:24px;">
+      <div class="card-header">
+        <h3><i class="ri-pulse-line"></i>Sintomas acompanhados (fibromialgia / artrite)</h3>
+      </div>
+      <div class="symptom-row">
+        <div>
+          <div class="symptom-name">Dor articular generalizada</div>
+          <div class="symptom-note">escala 1 (ausente) a 5 (intensa)</div>
+        </div>
+        <div class="symptom-scale">
+          <div class="scale-dot filled"></div><div class="scale-dot filled"></div><div class="scale-dot"></div><div class="scale-dot"></div><div class="scale-dot"></div>
+        </div>
+      </div>
+      <div class="symptom-row">
+        <div>
+          <div class="symptom-name">Fadiga / energia</div>
+          <div class="symptom-note">escala 1 (ausente) a 5 (intensa)</div>
+        </div>
+        <div class="symptom-scale">
+          <div class="scale-dot filled"></div><div class="scale-dot filled"></div><div class="scale-dot filled"></div><div class="scale-dot"></div><div class="scale-dot"></div>
+        </div>
+      </div>
+      <div class="symptom-row">
+        <div>
+          <div class="symptom-name">Distensão abdominal</div>
+          <div class="symptom-note">escala 1 (ausente) a 5 (intensa)</div>
+        </div>
+        <div class="symptom-scale">
+          <div class="scale-dot filled"></div><div class="scale-dot"></div><div class="scale-dot"></div><div class="scale-dot"></div><div class="scale-dot"></div>
+        </div>
+      </div>
+      <div class="symptom-row">
+        <div>
+          <div class="symptom-name">Clareza mental</div>
+          <div class="symptom-note">escala 1 (ruim) a 5 (ótima) — quanto maior, melhor</div>
+        </div>
+        <div class="symptom-scale">
+          <div class="scale-dot filled"></div><div class="scale-dot filled"></div><div class="scale-dot filled"></div><div class="scale-dot filled"></div><div class="scale-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      <i class="ri-error-warning-line"></i>
+      <p>
+        <strong>Este sistema não substitui acompanhamento médico.</strong> O protocolo de suplementação, fitoterápicos,
+        cepas probióticas e exames deve ser sempre validado com o médico responsável pelo tratamento antes de qualquer
+        alteração. A plataforma organiza e acompanha o processo — a decisão clínica é sempre do profissional de saúde.
+      </p>
+    </div>
+
+    <div class="refs">
+      <div class="ref-item"><strong>Referência 1:</strong> DAVIS, William. Barriga de Trigo — Elimine o Trigo, Perca Peso e Encontre o Caminho de Volta à Saúde.</div>
+      <div class="ref-item"><strong>Referência 2:</strong> DAVIS, William. Super Intestino — Restaure a Microbiota Intestinal para uma Perda de Peso Duradoura, Melhor Saúde e Rejuvenescimento Profundo.</div>
+    </div>
+
+    <div class="footer-note">
+      sistema-root-sibo-sifo · módulo Alimentação v0.1 · Projeto de iniciativa própria — Gustavo Paula dos Santos, Pesquisador e Escritor
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

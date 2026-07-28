@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — GPS.dev</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="ri-code-s-slash-line"></i></div>
+      <div>
+        <span class="logo-text">SISTEMA</span>
+        <span class="logo-sub">GPS.dev</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">Principal</div>
+
+      <div class="nav-item active" data-page="dashboard.html" onclick="navegarPara('dashboard.html')">
+        <i class="ri-dashboard-line"></i>
+        <span>Dashboard</span>
+      </div>
+
+      <!-- Adicione itens de menu aqui -->
+      <div class="nav-item" data-page="modulo1.html" onclick="navegarPara('modulo1.html')">
+        <i class="ri-file-list-3-line"></i>
+        <span>Módulo 1</span>
+      </div>
+
+      <div class="nav-item" data-page="modulo2.html" onclick="navegarPara('modulo2.html')">
+        <i class="ri-bar-chart-line"></i>
+        <span>Módulo 2</span>
+      </div>
+
+      <div class="nav-section">Sistema</div>
+
+      <div class="nav-item" onclick="GPS.auth.logout()">
+        <i class="ri-logout-box-line"></i>
+        <span>Sair</span>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="avatar">G</div>
+        <div>
+          <div style="color:var(--text-muted);font-size:.78rem;">Administrador</div>
+          <div style="color:var(--text-dim);font-size:.7rem;">GPS.dev</div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="btn-icon hamburger" onclick="GPS.sidebar.toggle()">
+          <i class="ri-menu-line" style="font-size:1.25rem;"></i>
+        </button>
+        <span class="topbar-title" id="topbar-titulo">Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-icon" title="Notificações">
+          <i class="ri-notification-3-line"></i>
+        </button>
+        <button class="btn-icon" onclick="GPS.auth.logout()" title="Sair">
+          <i class="ri-logout-box-r-line"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- PAGE -->
+    <main class="page">
+
+      <div class="page-header">
+        <h2 class="page-title">Visão Geral</h2>
+        <p class="page-subtitle">Resumo atualizado do sistema</p>
+      </div>
+
+      <!-- CARDS DE RESUMO -->
+      <div class="cards-grid">
+
+        <div class="card">
+          <div class="card-icon"><i class="ri-bar-chart-2-line"></i></div>
+          <div class="card-value">—</div>
+          <div class="card-label">Card 1</div>
+          <div class="card-delta up"><i class="ri-arrow-up-line"></i> +0%</div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon"><i class="ri-file-chart-line"></i></div>
+          <div class="card-value">—</div>
+          <div class="card-label">Card 2</div>
+          <div class="card-delta up"><i class="ri-arrow-up-line"></i> +0%</div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon"><i class="ri-group-line"></i></div>
+          <div class="card-value">—</div>
+          <div class="card-label">Card 3</div>
+          <div class="card-delta down"><i class="ri-arrow-down-line"></i> 0%</div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon"><i class="ri-money-dollar-circle-line"></i></div>
+          <div class="card-value">—</div>
+          <div class="card-label">Card 4</div>
+          <div class="card-delta up"><i class="ri-arrow-up-line"></i> +0%</div>
+        </div>
+
+      </div>
+
+      <!-- TABELA EXEMPLO -->
+      <div class="table-wrap">
+        <div class="table-header">
+          <h3>Registros recentes</h3>
+          <button class="btn btn-ghost" onclick="GPS.toast.show('Exportado!', 'success')">
+            <i class="ri-download-line"></i> Exportar
+          </button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>Status</th>
+              <th>Data</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-body">
+            <tr>
+              <td colspan="5" style="text-align:center;color:var(--text-dim);padding:2rem;">
+                Nenhum registro ainda.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  // Protege a página
+  GPS.auth.check();
+
+  // Navegação entre módulos (SPA simples)
+  function navegarPara(pagina) {
+    window.location.href = pagina;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gegl>
+  <node operation='photos:magic-filter'>
+      <params>
+        <param name='preset'>trencin</param>
+      </params>
+  </node>
+  <node operation='photos:saturation' passthrough='true'>
+      <params>
+        <param name='scale'>1</param>
+      </params>
+  </node>
+  <node operation='gegl:shadows-highlights' passthrough='true'>
+      <params>
+        <param name='shadows'>0</param>
+        <param name='highlights'>0</param>
+        <param name='whitepoint'>0</param>
+        <param name='radius'>100</param>
+        <param name='compress'>50</param>
+        <param name='shadows-ccorrect'>100</param>
+        <param name='highlights-ccorrect'>50</param>
+      </params>
+  </node>
+  <node operation='gegl:noise-reduction' passthrough='true'>
+      <params>
+        <param name='iterations'>4</param>
+      </params>
+  </node>
+  <node operation='gegl:crop' passthrough='true'>
+      <params>
+        <param name='x'>0</param>
+        <param name='y'>0</param>
+        <param name='width'>0</param>
+        <param name='height'>0</param>
+        <param name='reset-origin'>false</param>
+      </params>
+  </node>
+</gegl>
