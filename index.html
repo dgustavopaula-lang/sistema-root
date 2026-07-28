@@ -3,397 +3,591 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Atlas Hotel — Sistema de Gestão Noturna</title>
+<title>Atlas Hotel — Sistema de Gestão</title>
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f172a;
-    --bg2: #1e293b;
-    --bg3: #334155;
-    --accent: #F97316;
-    --accent2: #fb923c;
-    --text: #f1f5f9;
-    --text2: #94a3b8;
-    --green: #22c55e;
-    --yellow: #eab308;
-    --red: #ef4444;
-    --blue: #3b82f6;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; min-height:100vh; }
+:root {
+  --bg:      #0f172a;
+  --bg2:     #1e293b;
+  --bg3:     #334155;
+  --bg4:     #475569;
+  --accent:  #F97316;
+  --accent2: #fb923c;
+  --text:    #f1f5f9;
+  --text2:   #94a3b8;
+  --green:   #22c55e;
+  --yellow:  #eab308;
+  --red:     #ef4444;
+  --blue:    #3b82f6;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;}
 
-  /* HEADER */
-  header {
-    background:var(--bg2);
-    border-bottom:1px solid var(--bg3);
-    padding:0 24px;
-    height:60px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    position:sticky;
-    top:0;
-    z-index:100;
-  }
-  .logo { display:flex; align-items:center; gap:10px; }
-  .logo-icon {
-    width:36px; height:36px;
-    background:var(--accent);
-    border-radius:8px;
-    display:flex; align-items:center; justify-content:center;
-    font-weight:800; font-size:14px; color:#fff;
-  }
-  .logo-text { font-weight:700; font-size:16px; }
-  .logo-sub { font-size:11px; color:var(--text2); }
-  .header-right { display:flex; align-items:center; gap:16px; }
-  .mode-badge {
-    background:#16213e;
-    border:1px solid var(--accent);
-    color:var(--accent);
-    padding:4px 12px;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:600;
-    display:flex; align-items:center; gap:6px;
-  }
-  .mode-badge::before {
-    content:'';
-    width:6px; height:6px;
-    background:var(--accent);
-    border-radius:50%;
-    animation:pulse 2s infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .clock { font-size:18px; font-weight:700; color:var(--accent); font-variant-numeric:tabular-nums; }
+/* ── HEADER ── */
+header{
+  background:var(--bg2);border-bottom:1px solid var(--bg3);
+  padding:0 24px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:300;
+}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{
+  width:36px;height:36px;background:var(--accent);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;color:#fff;
+}
+.logo-text{font-weight:700;font-size:16px;}
+.logo-sub{font-size:11px;color:var(--text2);}
+.header-right{display:flex;align-items:center;gap:16px;}
+.mode-badge{
+  background:#16213e;border:1px solid var(--accent);color:var(--accent);
+  padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;
+  display:flex;align-items:center;gap:6px;
+}
+.mode-badge::before{
+  content:'';width:6px;height:6px;background:var(--accent);
+  border-radius:50%;animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.clock{font-size:18px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;}
 
-  /* TABS */
-  .tabs {
-    background:var(--bg2);
-    border-bottom:1px solid var(--bg3);
-    display:flex;
-    padding:0 24px;
-  }
-  .tab {
-    padding:14px 20px;
-    cursor:pointer;
-    font-size:13px;
-    font-weight:500;
-    color:var(--text2);
-    border-bottom:2px solid transparent;
-    display:flex; align-items:center; gap:8px;
-    transition:all 0.2s;
-  }
-  .tab:hover { color:var(--text); }
-  .tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+/* ── TABS ── */
+.tabs{
+  background:var(--bg2);border-bottom:1px solid var(--bg3);
+  display:flex;padding:0 16px;overflow-x:auto;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  padding:14px 18px;cursor:pointer;font-size:13px;font-weight:500;
+  color:var(--text2);border-bottom:2px solid transparent;
+  display:flex;align-items:center;gap:7px;transition:all .2s;
+  white-space:nowrap;flex-shrink:0;
+}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 
-  /* MAIN */
-  main { padding:24px; max-width:1200px; margin:0 auto; }
+/* ── MAIN ── */
+main{padding:24px;max-width:1200px;margin:0 auto;}
+.panel{display:none;}
+.panel.active{display:block;}
 
-  /* PANELS */
-  .panel { display:none; }
-  .panel.active { display:block; }
+/* ── CARDS / STATS ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.stat-card{
+  background:var(--bg2);border:1px solid var(--bg3);
+  border-radius:12px;padding:20px;
+}
+.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.stat-value{font-size:32px;font-weight:800;}
+.stat-value.orange{color:var(--accent);}
+.stat-value.green{color:var(--green);}
+.stat-value.blue{color:var(--blue);}
+.stat-value.white{color:var(--text);}
+.stat-value.red{color:var(--red);}
+.stat-value.yellow{color:var(--yellow);}
 
-  /* STATS */
-  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
-  .stat-card {
-    background:var(--bg2);
-    border:1px solid var(--bg3);
-    border-radius:12px;
-    padding:20px;
-  }
-  .stat-label { font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
-  .stat-value { font-size:32px; font-weight:800; }
-  .stat-value.orange { color:var(--accent); }
-  .stat-value.green { color:var(--green); }
-  .stat-value.blue { color:var(--blue); }
-  .stat-value.white { color:var(--text); }
+/* ── SECTION TITLE ── */
+.section-title{
+  font-size:12px;text-transform:uppercase;letter-spacing:1px;
+  color:var(--text2);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:var(--bg3);}
 
-  /* SECTION TITLE */
-  .section-title {
-    font-size:13px;
-    text-transform:uppercase;
-    letter-spacing:1px;
-    color:var(--text2);
-    margin-bottom:16px;
-    display:flex; align-items:center; gap:8px;
-  }
-  .section-title::after { content:''; flex:1; height:1px; background:var(--bg3); }
+/* ── ROOMS GRID ── */
+.rooms-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;}
+.room-card{
+  background:var(--bg2);border:1px solid var(--bg3);
+  border-radius:10px;padding:14px;cursor:pointer;
+  transition:all .2s;position:relative;
+}
+.room-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+.room-card.vago{opacity:.5;cursor:default;}
+.room-card.vago:hover{transform:none;border-color:var(--bg3);}
+.room-number{font-size:15px;font-weight:700;margin-bottom:4px;}
+.room-guest{font-size:12px;color:var(--text2);margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.room-status{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;
+}
+.status-fora{background:#7c2d12;color:#fed7aa;}
+.status-retornou{background:#14532d;color:#bbf7d0;}
+.status-ocupado{background:#1e3a5f;color:#93c5fd;}
+.status-vago{background:var(--bg3);color:var(--text2);}
+.status-limpeza{background:#3b1f6e;color:#d8b4fe;}
+.room-time{font-size:10px;color:var(--text2);margin-top:6px;}
 
-  /* ROOMS GRID */
-  .rooms-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:24px; }
-  .room-card {
-    background:var(--bg2);
-    border:1px solid var(--bg3);
-    border-radius:10px;
-    padding:14px;
-    cursor:pointer;
-    transition:all 0.2s;
-    position:relative;
-  }
-  .room-card:hover { border-color:var(--accent); transform:translateY(-2px); }
-  .room-card.vago { opacity:0.5; cursor:default; }
-  .room-card.vago:hover { transform:none; border-color:var(--bg3); }
-  .room-number { font-size:15px; font-weight:700; margin-bottom:4px; }
-  .room-guest { font-size:12px; color:var(--text2); margin-bottom:10px; }
-  .room-status {
-    display:inline-flex; align-items:center; gap:5px;
-    padding:3px 10px; border-radius:20px;
-    font-size:11px; font-weight:600;
-  }
-  .status-fora { background:#7c2d12; color:#fed7aa; }
-  .status-retornou { background:#14532d; color:#bbf7d0; }
-  .status-vago { background:var(--bg3); color:var(--text2); }
-  .room-time { font-size:10px; color:var(--text2); margin-top:6px; }
+/* ── FORMS ── */
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:12px;color:var(--text2);margin-bottom:6px;}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;background:var(--bg3);border:1px solid var(--bg4);
+  border-radius:8px;padding:10px 14px;color:var(--text);
+  font-size:14px;outline:none;transition:border-color .2s;font-family:inherit;
+}
+.form-group textarea{resize:vertical;min-height:80px;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
 
-  /* QR PANEL */
-  .qr-container {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:24px;
-  }
-  .qr-form {
-    background:var(--bg2);
-    border:1px solid var(--bg3);
-    border-radius:12px;
-    padding:24px;
-  }
-  .qr-form h3 { margin-bottom:20px; font-size:16px; }
-  .form-group { margin-bottom:16px; }
-  .form-group label { display:block; font-size:12px; color:var(--text2); margin-bottom:6px; }
-  .form-group input, .form-group select {
-    width:100%;
-    background:var(--bg3);
-    border:1px solid #475569;
-    border-radius:8px;
-    padding:10px 14px;
-    color:var(--text);
-    font-size:14px;
-    outline:none;
-    transition:border-color 0.2s;
-  }
-  .form-group input:focus, .form-group select:focus { border-color:var(--accent); }
-  .btn-primary {
-    background:var(--accent);
-    color:#fff;
-    border:none;
-    padding:12px 24px;
-    border-radius:8px;
-    font-size:14px;
-    font-weight:600;
-    cursor:pointer;
-    width:100%;
-    display:flex; align-items:center; justify-content:center; gap:8px;
-    transition:background 0.2s;
-  }
-  .btn-primary:hover { background:var(--accent2); }
+/* ── BUTTONS ── */
+.btn{
+  border:none;padding:10px 20px;border-radius:8px;font-size:13px;
+  font-weight:600;cursor:pointer;display:inline-flex;align-items:center;
+  gap:7px;transition:all .2s;
+}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:var(--accent2);}
+.btn-secondary{background:var(--bg3);color:var(--text);}
+.btn-secondary:hover{background:var(--bg4);}
+.btn-danger{background:#7f1d1d;color:#fca5a5;}
+.btn-danger:hover{background:#991b1b;}
+.btn-success{background:#14532d;color:#bbf7d0;}
+.btn-success:hover{background:#166534;}
+.btn-full{width:100%;justify-content:center;}
+.btn-sm{padding:6px 14px;font-size:12px;}
 
-  .qr-preview {
-    background:var(--bg2);
-    border:1px solid var(--bg3);
-    border-radius:12px;
-    padding:24px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:16px;
-    text-align:center;
-  }
-  .qr-box {
-    width:200px; height:200px;
-    background:#fff;
-    border-radius:12px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:12px; color:#666;
-    position:relative;
-    overflow:hidden;
-  }
-  .qr-placeholder { color:#aaa; font-size:13px; }
-  .qr-info { font-size:13px; color:var(--text2); }
-  .qr-info strong { color:var(--text); display:block; font-size:16px; margin-bottom:4px; }
+/* ── CARD BOX ── */
+.card{background:var(--bg2);border:1px solid var(--bg3);border-radius:12px;padding:24px;}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.card-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
 
-  /* GUEST SCREEN */
-  .guest-screen {
-    background:var(--bg2);
-    border:1px solid var(--bg3);
-    border-radius:16px;
-    padding:40px;
-    max-width:480px;
-    margin:0 auto;
-    text-align:center;
-  }
-  .guest-hotel-name { font-size:28px; font-weight:800; color:var(--accent); margin-bottom:8px; }
-  .guest-subtitle { color:var(--text2); font-size:14px; margin-bottom:32px; }
-  .guest-room-display {
-    background:var(--bg);
-    border-radius:12px;
-    padding:24px;
-    margin-bottom:24px;
-  }
-  .guest-room-number { font-size:48px; font-weight:800; color:var(--accent); }
-  .guest-room-label { font-size:14px; color:var(--text2); margin-top:4px; }
-  .guest-instruction {
-    background:#1a2744;
-    border:1px solid #2d4a8a;
-    border-radius:10px;
-    padding:16px;
-    font-size:14px;
-    color:#93c5fd;
-    line-height:1.6;
-    margin-bottom:24px;
-  }
-  .btn-return {
-    background:var(--green);
-    color:#fff;
-    border:none;
-    padding:16px 32px;
-    border-radius:10px;
-    font-size:16px;
-    font-weight:700;
-    cursor:pointer;
-    width:100%;
-    display:flex; align-items:center; justify-content:center; gap:10px;
-    transition:all 0.2s;
-  }
-  .btn-return:hover { background:#16a34a; transform:scale(1.02); }
-  .silent-badge {
-    display:inline-flex; align-items:center; gap:6px;
-    background:#1e293b;
-    border:1px solid var(--bg3);
-    border-radius:20px;
-    padding:6px 16px;
-    font-size:12px;
-    color:var(--text2);
-    margin-top:16px;
-  }
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead th{
+  text-align:left;font-size:11px;text-transform:uppercase;
+  letter-spacing:1px;color:var(--text2);padding:10px 14px;
+  border-bottom:1px solid var(--bg3);
+}
+tbody td{padding:12px 14px;border-bottom:1px solid var(--bg3);font-size:13px;vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:rgba(255,255,255,.03);}
 
-  /* LOG */
-  .log-list { display:flex; flex-direction:column; gap:8px; }
-  .log-item {
-    background:var(--bg2);
-    border:1px solid var(--bg3);
-    border-radius:10px;
-    padding:14px 16px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-  }
-  .log-icon {
-    width:36px; height:36px;
-    border-radius:8px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:16px;
-    flex-shrink:0;
-  }
-  .li-ret { background:#14532d; color:#22c55e; }
-  .li-out { background:#7c2d12; color:#f97316; }
-  .log-room { font-weight:700; font-size:14px; }
-  .log-desc { font-size:12px; color:var(--text2); margin-top:2px; }
-  .log-time { margin-left:auto; font-size:12px; color:var(--text2); font-variant-numeric:tabular-nums; flex-shrink:0; }
+/* ── BADGES ── */
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;
+}
+.badge-green{background:#14532d;color:#bbf7d0;}
+.badge-orange{background:#7c2d12;color:#fed7aa;}
+.badge-blue{background:#1e3a5f;color:#93c5fd;}
+.badge-purple{background:#3b1f6e;color:#d8b4fe;}
+.badge-gray{background:var(--bg3);color:var(--text2);}
+.badge-yellow{background:#422006;color:#fde68a;}
 
-  /* MODAL */
-  .modal-overlay {
-    display:none;
-    position:fixed; inset:0;
-    background:rgba(0,0,0,0.7);
-    z-index:200;
-    align-items:center; justify-content:center;
-  }
-  .modal-overlay.open { display:flex; }
-  .modal {
-    background:var(--bg2);
-    border:1px solid var(--bg3);
-    border-radius:16px;
-    padding:28px;
-    width:360px;
-    text-align:center;
-  }
-  .modal h3 { font-size:18px; margin-bottom:8px; }
-  .modal p { color:var(--text2); font-size:14px; margin-bottom:24px; }
-  .modal-btns { display:flex; gap:12px; }
-  .btn-secondary {
-    flex:1; background:var(--bg3); color:var(--text); border:none;
-    padding:12px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer;
-  }
-  .btn-confirm {
-    flex:1; background:var(--accent); color:#fff; border:none;
-    padding:12px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer;
-  }
+/* ── MODAL OVERLAY ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.75);z-index:500;
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--bg2);border:1px solid var(--bg3);
+  border-radius:16px;padding:28px;
+  width:100%;max-width:480px;
+  max-height:90vh;overflow-y:auto;
+}
+.modal-sm{max-width:360px;}
+.modal h3{font-size:17px;margin-bottom:6px;}
+.modal .modal-sub{color:var(--text2);font-size:13px;margin-bottom:20px;}
+.modal-btns{display:flex;gap:12px;margin-top:20px;}
+.modal-btns .btn{flex:1;justify-content:center;}
 
-  @media(max-width:768px) {
-    .stats { grid-template-columns:repeat(2,1fr); }
-    .rooms-grid { grid-template-columns:repeat(3,1fr); }
-    .qr-container { grid-template-columns:1fr; }
-  }
+/* ── SEARCH BAR ── */
+.search-bar{
+  display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;
+}
+.search-bar input,.search-bar select{
+  background:var(--bg2);border:1px solid var(--bg3);
+  border-radius:8px;padding:9px 14px;color:var(--text);
+  font-size:13px;outline:none;
+}
+.search-bar input{flex:1;min-width:180px;}
+.search-bar input:focus,.search-bar select:focus{border-color:var(--accent);}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:48px 20px;color:var(--text2);}
+.empty i{font-size:48px;display:block;margin-bottom:12px;opacity:.4;}
+.empty p{font-size:14px;}
+
+/* ── LOG LIST ── */
+.log-list{display:flex;flex-direction:column;gap:8px;}
+.log-item{
+  background:var(--bg2);border:1px solid var(--bg3);
+  border-radius:10px;padding:14px 16px;
+  display:flex;align-items:center;gap:14px;
+}
+.log-icon{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.li-ret{background:#14532d;color:#22c55e;}
+.li-out{background:#7c2d12;color:#f97316;}
+.li-res{background:#1e3a5f;color:#3b82f6;}
+.li-fin{background:#422006;color:#fde68a;}
+.log-room{font-weight:700;font-size:14px;}
+.log-desc{font-size:12px;color:var(--text2);margin-top:2px;}
+.log-time{margin-left:auto;font-size:12px;color:var(--text2);font-variant-numeric:tabular-nums;flex-shrink:0;}
+
+/* ── QR ── */
+.qr-container{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.qr-box{
+  width:200px;height:200px;background:#fff;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.qr-info{font-size:13px;color:var(--text2);text-align:center;}
+.qr-info strong{color:var(--text);display:block;font-size:16px;margin-bottom:4px;}
+
+/* ── TELA HÓSPEDE ── */
+.guest-screen{
+  background:var(--bg2);border:1px solid var(--bg3);
+  border-radius:16px;padding:40px;max-width:480px;margin:0 auto;text-align:center;
+}
+.guest-hotel-name{font-size:28px;font-weight:800;color:var(--accent);margin-bottom:8px;}
+.guest-subtitle{color:var(--text2);font-size:14px;margin-bottom:32px;}
+.guest-room-display{background:var(--bg);border-radius:12px;padding:24px;margin-bottom:24px;}
+.guest-room-number{font-size:48px;font-weight:800;color:var(--accent);}
+.guest-room-label{font-size:14px;color:var(--text2);margin-top:4px;}
+.guest-instruction{
+  background:#1a2744;border:1px solid #2d4a8a;border-radius:10px;
+  padding:16px;font-size:14px;color:#93c5fd;line-height:1.6;margin-bottom:24px;
+}
+.btn-return{
+  background:var(--green);color:#fff;border:none;padding:16px 32px;
+  border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;width:100%;
+  display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;
+}
+.btn-return:hover{background:#16a34a;transform:scale(1.02);}
+.silent-badge{
+  display:inline-flex;align-items:center;gap:6px;background:#1e293b;
+  border:1px solid var(--bg3);border-radius:20px;padding:6px 16px;
+  font-size:12px;color:var(--text2);margin-top:16px;
+}
+
+/* ── FINANCEIRO ── */
+.fin-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+.fin-item{
+  background:var(--bg2);border:1px solid var(--bg3);
+  border-radius:12px;padding:20px;
+}
+.fin-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.fin-value{font-size:26px;font-weight:800;}
+
+/* ── GOVERNANÇA ── */
+.gov-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+.gov-card{
+  background:var(--bg2);border:1px solid var(--bg3);
+  border-radius:10px;padding:14px;
+}
+.gov-num{font-size:15px;font-weight:700;margin-bottom:8px;}
+.gov-status-btns{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
+.gov-btn{
+  border:none;padding:5px 8px;border-radius:6px;font-size:11px;
+  font-weight:600;cursor:pointer;transition:all .15s;
+}
+
+/* ── RESPONSIVO ── */
+@media(max-width:768px){
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .rooms-grid{grid-template-columns:repeat(3,1fr);}
+  .qr-container{grid-template-columns:1fr;}
+  .form-row,.form-row-3{grid-template-columns:1fr;}
+  .fin-summary{grid-template-columns:1fr 1fr;}
+  .gov-grid{grid-template-columns:repeat(3,1fr);}
+  main{padding:16px;}
+  .tab{padding:12px 12px;font-size:12px;}
+}
+@media(max-width:480px){
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .rooms-grid{grid-template-columns:repeat(2,1fr);}
+  .gov-grid{grid-template-columns:repeat(2,1fr);}
+  .fin-summary{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
 
+<!-- ═══════════════════════ HEADER ═══════════════════════ -->
 <header>
   <div class="logo">
     <div class="logo-icon">AH</div>
     <div>
       <div class="logo-text">Atlas Hotel</div>
-      <div class="logo-sub">Sistema de Gestão Noturna</div>
+      <div class="logo-sub">Sistema de Gestão</div>
     </div>
   </div>
   <div class="header-right">
-    <div class="mode-badge">Modo noturno ativo</div>
+    <div class="mode-badge" id="mode-badge">Diurno</div>
     <div class="clock" id="clock">00:00:00</div>
   </div>
 </header>
 
+<!-- ═══════════════════════ TABS ═══════════════════════ -->
 <div class="tabs">
-  <div class="tab active" onclick="showPanel('painel',this)"><i class="ri-dashboard-line"></i> Painel</div>
-  <div class="tab" onclick="showPanel('qrcode',this)"><i class="ri-qr-code-line"></i> Gerar QR Code</div>
-  <div class="tab" onclick="showPanel('hospede',this)"><i class="ri-hotel-line"></i> Tela do Hóspede</div>
-  <div class="tab" onclick="showPanel('log',this)"><i class="ri-file-list-line"></i> Log Noturno</div>
+  <div class="tab active"   data-panel="painel">    <i class="ri-dashboard-line"></i> Painel</div>
+  <div class="tab"          data-panel="reservas">  <i class="ri-calendar-check-line"></i> Reservas</div>
+  <div class="tab"          data-panel="hospedes">  <i class="ri-user-line"></i> Hóspedes</div>
+  <div class="tab"          data-panel="financeiro"><i class="ri-money-dollar-circle-line"></i> Financeiro</div>
+  <div class="tab"          data-panel="governanca"><i class="ri-brush-line"></i> Governança</div>
+  <div class="tab"          data-panel="noturno">   <i class="ri-moon-line"></i> Controle Noturno</div>
 </div>
 
+<!-- ═══════════════════════ MAIN ═══════════════════════ -->
 <main>
 
-  <!-- PAINEL -->
-  <div class="panel active" id="panel-painel">
-    <div class="stats">
-      <div class="stat-card">
-        <div class="stat-label">Quartos Ocupados</div>
-        <div class="stat-value white" id="s-occ">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Hóspedes Fora</div>
-        <div class="stat-value orange" id="s-out">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Retornos Esta Noite</div>
-        <div class="stat-value green" id="s-ret">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Quartos Vagos</div>
-        <div class="stat-value blue" id="s-empty">0</div>
-      </div>
+<!-- ══════════ PAINEL ══════════ -->
+<div class="panel active" id="panel-painel">
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Quartos Ocupados</div>
+      <div class="stat-value white" id="s-occ">0</div>
     </div>
-
-    <div class="section-title">Status dos Quartos — Clique para registrar retorno</div>
-    <div class="rooms-grid" id="rooms-grid"></div>
+    <div class="stat-card">
+      <div class="stat-label">Hóspedes Fora</div>
+      <div class="stat-value orange" id="s-out">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Check-outs Hoje</div>
+      <div class="stat-value yellow" id="s-co">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Quartos Vagos</div>
+      <div class="stat-value blue" id="s-empty">0</div>
+    </div>
   </div>
 
-  <!-- QR CODE -->
-  <div class="panel" id="panel-qrcode">
+  <div class="section-title">Status dos Quartos</div>
+  <div class="rooms-grid" id="rooms-grid-painel"></div>
+
+  <div class="section-title">Atividade Recente</div>
+  <div class="log-list" id="log-painel">
+    <div class="empty"><i class="ri-time-line"></i><p>Nenhuma atividade ainda</p></div>
+  </div>
+</div>
+
+<!-- ══════════ RESERVAS ══════════ -->
+<div class="panel" id="panel-reservas">
+  <div class="card-header">
+    <div class="card-title"><i class="ri-calendar-check-line"></i> Reservas</div>
+    <button class="btn btn-primary" onclick="abrirModalReserva()">
+      <i class="ri-add-line"></i> Nova Reserva
+    </button>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="busca-reservas" placeholder="Buscar por nome, quarto..." oninput="renderReservas()">
+    <select id="filtro-status-reserva" onchange="renderReservas()">
+      <option value="">Todos os status</option>
+      <option value="confirmada">Confirmada</option>
+      <option value="checkin">Check-in Feito</option>
+      <option value="checkout">Check-out</option>
+      <option value="cancelada">Cancelada</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Hóspede</th>
+            <th>Quarto</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+            <th>Diárias</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tbody-reservas">
+          <tr><td colspan="8" class="empty" style="padding:40px;text-align:center;color:var(--text2);">
+            <i class="ri-calendar-line" style="font-size:36px;display:block;margin-bottom:8px;opacity:.4;"></i>
+            Nenhuma reserva cadastrada
+          </td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ HÓSPEDES ══════════ -->
+<div class="panel" id="panel-hospedes">
+  <div class="card-header">
+    <div class="card-title"><i class="ri-user-line"></i> Hóspedes</div>
+    <button class="btn btn-primary" onclick="abrirModalHospede()">
+      <i class="ri-user-add-line"></i> Novo Hóspede
+    </button>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="busca-hospedes" placeholder="Buscar por nome, CPF, telefone..." oninput="renderHospedes()">
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Telefone</th>
+            <th>E-mail</th>
+            <th>Última Estadia</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tbody-hospedes">
+          <tr><td colspan="6" style="padding:40px;text-align:center;color:var(--text2);">
+            <i class="ri-user-line" style="font-size:36px;display:block;margin-bottom:8px;opacity:.4;"></i>
+            Nenhum hóspede cadastrado
+          </td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FINANCEIRO ══════════ -->
+<div class="panel" id="panel-financeiro">
+  <div class="fin-summary">
+    <div class="fin-item">
+      <div class="fin-label">Receita do Dia</div>
+      <div class="fin-value green" id="fin-receita">R$ 0,00</div>
+    </div>
+    <div class="fin-item">
+      <div class="fin-label">Despesas do Dia</div>
+      <div class="fin-value red" id="fin-despesa">R$ 0,00</div>
+    </div>
+    <div class="fin-item">
+      <div class="fin-label">Saldo do Dia</div>
+      <div class="fin-value white" id="fin-saldo">R$ 0,00</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:20px;"><i class="ri-add-circle-line"></i> Novo Lançamento</div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select id="fin-tipo">
+          <option value="receita">Receita</option>
+          <option value="despesa">Despesa</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Descrição</label>
+        <input type="text" id="fin-desc" placeholder="Ex: Diária quarto 101">
+      </div>
+      <div class="form-group">
+        <label>Valor (R$)</label>
+        <input type="number" id="fin-valor" placeholder="0,00" min="0" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Categoria</label>
+        <select id="fin-cat">
+          <option value="diaria">Diária</option>
+          <option value="servico">Serviço</option>
+          <option value="restaurante">Restaurante</option>
+          <option value="manutencao">Manutenção</option>
+          <option value="outros">Outros</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="lancarFinanceiro()">
+        <i class="ri-save-line"></i> Registrar
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:20px;"><i class="ri-list-check"></i> Lançamentos de Hoje</div>
+      <div class="log-list" id="log-financeiro">
+        <div class="empty"><i class="ri-money-dollar-circle-line"></i><p>Nenhum lançamento hoje</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ GOVERNANÇA ══════════ -->
+<div class="panel" id="panel-governanca">
+  <div class="stats" style="grid-template-columns:repeat(3,1fr);">
+    <div class="stat-card">
+      <div class="stat-label">Limpos</div>
+      <div class="stat-value green" id="gov-limpos">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Em Limpeza</div>
+      <div class="stat-value yellow" id="gov-limpando">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pendentes</div>
+      <div class="stat-value red" id="gov-pendentes">0</div>
+    </div>
+  </div>
+
+  <div class="section-title">Status por Quarto</div>
+  <div class="gov-grid" id="gov-grid"></div>
+</div>
+
+<!-- ══════════ CONTROLE NOTURNO ══════════ -->
+<div class="panel" id="panel-noturno">
+  <div class="tabs" style="background:transparent;border:none;padding:0;margin-bottom:20px;">
+    <div class="tab active" data-subpanel="n-painel"  style="border-radius:8px 8px 0 0;">
+      <i class="ri-dashboard-line"></i> Painel Noturno
+    </div>
+    <div class="tab" data-subpanel="n-qrcode" style="border-radius:8px 8px 0 0;">
+      <i class="ri-qr-code-line"></i> Gerar QR
+    </div>
+    <div class="tab" data-subpanel="n-hospede" style="border-radius:8px 8px 0 0;">
+      <i class="ri-hotel-line"></i> Tela Hóspede
+    </div>
+    <div class="tab" data-subpanel="n-log" style="border-radius:8px 8px 0 0;">
+      <i class="ri-file-list-line"></i> Log
+    </div>
+  </div>
+
+  <!-- Painel Noturno -->
+  <div class="subpanel active" id="subpanel-n-painel">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Ocupados</div>
+        <div class="stat-value white" id="ns-occ">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Fora</div>
+        <div class="stat-value orange" id="ns-out">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Retornaram</div>
+        <div class="stat-value green" id="ns-ret">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Vagos</div>
+        <div class="stat-value blue" id="ns-empty">0</div>
+      </div>
+    </div>
+    <div class="section-title">Quartos — Clique para registrar retorno</div>
+    <div class="rooms-grid" id="rooms-grid-noturno"></div>
+  </div>
+
+  <!-- QR Code -->
+  <div class="subpanel" id="subpanel-n-qrcode">
     <div class="qr-container">
-      <div class="qr-form">
-        <h3><i class="ri-qr-code-line"></i> Gerar QR Code para Hóspede</h3>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:20px;"><i class="ri-qr-code-line"></i> Gerar QR Code</div>
         <div class="form-group">
-          <label>Número do Quarto</label>
-          <select id="qr-room">
-            <option value="">Selecione o quarto</option>
-          </select>
+          <label>Quarto</label>
+          <select id="qr-room"></select>
         </div>
         <div class="form-group">
           <label>Nome do Hóspede</label>
           <input type="text" id="qr-guest" placeholder="Nome completo">
         </div>
         <div class="form-group">
-          <label>Validade do QR Code</label>
+          <label>Validade</label>
           <select id="qr-validity">
             <option value="1">1 noite</option>
             <option value="3">3 noites</option>
@@ -401,279 +595,866 @@
             <option value="30">Toda a estadia</option>
           </select>
         </div>
-        <button class="btn-primary" onclick="generateQR()">
+        <button class="btn btn-primary btn-full" onclick="gerarQR()">
           <i class="ri-qr-code-line"></i> Gerar QR Code
         </button>
       </div>
-      <div class="qr-preview" id="qr-preview">
+      <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
         <div class="qr-box" id="qr-box">
-          <div class="qr-placeholder">
-            <i class="ri-qr-code-line" style="font-size:48px;color:#334155;display:block;margin-bottom:8px;"></i>
-            QR Code aparecerá aqui
-          </div>
+          <i class="ri-qr-code-line" style="font-size:64px;color:#334155;"></i>
         </div>
-        <div class="qr-info" id="qr-info">
-          Preencha os dados ao lado<br>e clique em Gerar
-        </div>
-        <button class="btn-primary" id="btn-print" style="display:none;max-width:200px;" onclick="printQR()">
+        <div class="qr-info" id="qr-info">Preencha os dados e clique em Gerar</div>
+        <button class="btn btn-secondary" id="btn-print" style="display:none;" onclick="window.print()">
           <i class="ri-printer-line"></i> Imprimir
         </button>
       </div>
     </div>
   </div>
 
-  <!-- HOSPEDE -->
-  <div class="panel" id="panel-hospede">
+  <!-- Tela Hóspede -->
+  <div class="subpanel" id="subpanel-n-hospede">
     <div class="guest-screen">
       <div class="guest-hotel-name">Atlas Hotel</div>
       <div class="guest-subtitle">Bem-vindo de volta</div>
       <div class="guest-room-display">
-        <div class="guest-room-number" id="guest-room-num">101</div>
+        <div class="guest-room-number" id="guest-room-num">—</div>
         <div class="guest-room-label">Seu Quarto</div>
       </div>
       <div class="guest-instruction">
         <i class="ri-moon-line"></i>
-        Estamos no modo noturno. Por favor, entre em silêncio e dirija-se diretamente ao seu quarto. Obrigado pela consideração com os demais hóspedes.
+        Estamos no modo noturno. Por favor, entre em silêncio e dirija-se diretamente ao seu quarto.
       </div>
-      <button class="btn-return" onclick="registerReturn()">
-        <i class="ri-arrow-go-back-line"></i>
-        Registrar Meu Retorno
+      <button class="btn-return" onclick="registrarRetornoHospede()">
+        <i class="ri-arrow-go-back-line"></i> Registrar Meu Retorno
       </button>
-      <div class="silent-badge">
-        <i class="ri-volume-mute-line"></i>
-        Silêncio após 22h
-      </div>
+      <div class="silent-badge"><i class="ri-volume-mute-line"></i> Silêncio após 22h</div>
     </div>
   </div>
 
-  <!-- LOG -->
-  <div class="panel" id="panel-log">
+  <!-- Log Noturno -->
+  <div class="subpanel" id="subpanel-n-log">
     <div class="section-title">Registro de Atividades Noturnas</div>
-    <div class="log-list" id="log-list">
-      <div style="text-align:center;padding:40px;color:var(--text2);">
-        <i class="ri-file-list-line" style="font-size:48px;display:block;margin-bottom:12px;"></i>
-        Nenhuma atividade registrada ainda
-      </div>
-    </div>
-  </div>
-
-</main>
-
-<!-- MODAL -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <h3 id="modal-title">Registrar Retorno</h3>
-    <p id="modal-body">Confirmar retorno do hóspede?</p>
-    <div class="modal-btns">
-      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
-      <button class="btn-confirm" id="modal-confirm">Confirmar</button>
+    <div class="log-list" id="log-noturno">
+      <div class="empty"><i class="ri-file-list-line"></i><p>Nenhuma atividade registrada</p></div>
     </div>
   </div>
 </div>
 
-<script>
-// DADOS DOS QUARTOS
-const rooms = [
-  {num:'101',guest:'Carlos Mendes',status:'fora',time:'21:45'},
-  {num:'102',guest:'Ana Lima',status:'retornou',time:'22:30'},
-  {num:'103',guest:'',status:'vago',time:''},
-  {num:'104',guest:'Fernanda Costa',status:'fora',time:'22:10'},
-  {num:'105',guest:'Paulo Gomes',status:'retornou',time:'23:15'},
-  {num:'106',guest:'Maria Souza',status:'fora',time:'23:00'},
-  {num:'107',guest:'',status:'vago',time:''},
-  {num:'108',guest:'Lucas Pereira',status:'retornou',time:'00:05'},
-  {num:'109',guest:'Roberto Alves',status:'fora',time:'22:50'},
-  {num:'110',guest:'Juliana Nunes',status:'retornou',time:'01:10'},
-  {num:'111',guest:'Diego Santos',status:'fora',time:'22:00'},
-  {num:'112',guest:'Carla Reis',status:'retornou',time:'23:45'},
-  {num:'113',guest:'',status:'vago',time:''},
-  {num:'114',guest:'Bruno Costa',status:'fora',time:'21:30'},
-  {num:'115',guest:'Patrícia Lima',status:'retornou',time:'00:20'},
-];
+</main>
 
-const logs = [];
-let pendingRoom = null;
+<!-- ═══════════════════════ MODAIS ═══════════════════════ -->
 
-function nowStr() {
-  return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-}
-
-function updateClock() {
-  document.getElementById('clock').textContent =
-    new Date().toLocaleTimeString('pt-BR');
-}
-setInterval(updateClock,1000);
-updateClock();
-
-function updateStats() {
-  const occ = rooms.filter(r=>r.status!=='vago').length;
-  const out = rooms.filter(r=>r.status==='fora').length;
-  const ret = rooms.filter(r=>r.status==='retornou').length;
-  const empty = rooms.filter(r=>r.status==='vago').length;
-  document.getElementById('s-occ').textContent = occ;
-  document.getElementById('s-out').textContent = out;
-  document.getElementById('s-ret').textContent = ret;
-  document.getElementById('s-empty').textContent = empty;
-}
-
-function renderRooms() {
-  const grid = document.getElementById('rooms-grid');
-  grid.innerHTML = rooms.map((r,i) => `
-    <div class="room-card ${r.status==='vago'?'vago':''}" onclick="${r.status==='fora'?`openModal(${i})`:''}">
-      <div class="room-number">Qto ${r.num}</div>
-      <div class="room-guest">${r.guest||'Disponível'}</div>
-      <span class="room-status status-${r.status}">
-        <i class="ri-${r.status==='fora'?'walk-line':r.status==='retornou'?'check-line':'home-line'}"></i>
-        ${r.status==='fora'?'Fora':r.status==='retornou'?'Retornou':'Vago'}
-      </span>
-      ${r.time?`<div class="room-time">Desde ${r.time}</div>`:''}
+<!-- Modal Reserva -->
+<div class="modal-overlay" id="modal-reserva">
+  <div class="modal">
+    <h3 id="modal-reserva-titulo">Nova Reserva</h3>
+    <div class="modal-sub">Preencha os dados da reserva</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Hóspede</label>
+        <select id="res-hospede">
+          <option value="">Selecionar hóspede</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Quarto</label>
+        <select id="res-quarto">
+          <option value="">Selecionar quarto</option>
+        </select>
+      </div>
     </div>
-  `).join('');
-  updateStats();
-  populateQRSelect();
+    <div class="form-row">
+      <div class="form-group">
+        <label>Check-in</label>
+        <input type="date" id="res-checkin">
+      </div>
+      <div class="form-group">
+        <label>Check-out</label>
+        <input type="date" id="res-checkout">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Valor da Diária (R$)</label>
+        <input type="number" id="res-diaria" placeholder="0,00" min="0" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Forma de Pagamento</label>
+        <select id="res-pagamento">
+          <option value="dinheiro">Dinheiro</option>
+          <option value="pix">PIX</option>
+          <option value="cartao-credito">Cartão de Crédito</option>
+          <option value="cartao-debito">Cartão de Débito</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Observações</label>
+      <textarea id="res-obs" placeholder="Observações opcionais..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="fecharModal('modal-reserva')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarReserva()"><i class="ri-save-line"></i> Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Hóspede -->
+<div class="modal-overlay" id="modal-hospede">
+  <div class="modal">
+    <h3 id="modal-hospede-titulo">Novo Hóspede</h3>
+    <div class="modal-sub">Cadastro de hóspede</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nome Completo *</label>
+        <input type="text" id="hosp-nome" placeholder="Nome completo">
+      </div>
+      <div class="form-group">
+        <label>CPF</label>
+        <input type="text" id="hosp-cpf" placeholder="000.000.000-00" maxlength="14">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Telefone</label>
+        <input type="text" id="hosp-tel" placeholder="(00) 00000-0000">
+      </div>
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" id="hosp-email" placeholder="email@exemplo.com">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Observações</label>
+      <textarea id="hosp-obs" placeholder="Preferências, alergias, observações..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="fecharModal('modal-hospede')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarHospede()"><i class="ri-save-line"></i> Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirmação Genérico -->
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal modal-sm" style="text-align:center;">
+    <h3 id="confirm-titulo"></h3>
+    <p style="color:var(--text2);font-size:13px;margin-top:8px;" id="confirm-body"></p>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="fecharModal('modal-confirm')">Cancelar</button>
+      <button class="btn btn-primary" id="confirm-ok">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SCRIPT ═══════════════════════ -->
+<script>
+/* ══════════════════════════════════════════════
+   BANCO DE DADOS — localStorage
+══════════════════════════════════════════════ */
+const CHAVE = 'atlas-hotel-v1';
+
+let db = {
+  quartos: gerarQuartos(),
+  hospedes: [],
+  reservas: [],
+  financeiro: [],
+  logNoturno: [],
+  logGeral: []
+};
+
+function gerarQuartos() {
+  const q = [];
+  for (let i = 101; i <= 115; i++) {
+    q.push({
+      num: String(i),
+      tipo: i <= 105 ? 'Standard' : i <= 110 ? 'Superior' : 'Luxo',
+      status: 'vago',       // vago | ocupado | fora | retornou | limpeza
+      hospedeId: null,
+      hospedeName: '',
+      time: ''
+    });
+  }
+  return q;
 }
 
-function openModal(idx) {
-  pendingRoom = idx;
-  const r = rooms[idx];
-  document.getElementById('modal-title').textContent = `Registrar Retorno — Qto ${r.num}`;
-  document.getElementById('modal-body').textContent = `${r.guest} retornou ao hotel?`;
-  document.getElementById('modal-confirm').onclick = () => confirmReturn(idx);
-  document.getElementById('modal').classList.add('open');
+function salvar() {
+  localStorage.setItem(CHAVE, JSON.stringify(db));
 }
 
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
+function carregar() {
+  const raw = localStorage.getItem(CHAVE);
+  if (raw) {
+    try {
+      const salvo = JSON.parse(raw);
+      db = { ...db, ...salvo };
+      // garante que quartos inexistentes apareçam
+      if (!db.quartos || db.quartos.length === 0) db.quartos = gerarQuartos();
+    } catch(e) { db.quartos = gerarQuartos(); }
+  }
 }
 
-// ── SONS ─────────────────────────────────────────────────────────────────────
-function playBeep(freq=880, duration=0.15, type='sine', vol=0.4) {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    gain.gain.setValueAtTime(vol, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + duration);
-  } catch(e) {}
+/* ══════════════════════════════════════════════
+   UTILITÁRIOS
+══════════════════════════════════════════════ */
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+function nowStr() { return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+function hoje() { return new Date().toISOString().split('T')[0]; }
+function fmtData(iso) {
+  if (!iso) return '—';
+  const [y,m,d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+function fmtMoeda(v) {
+  return 'R$ ' + Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+function diffDias(ini, fim) {
+  const a = new Date(ini), b = new Date(fim);
+  return Math.max(1, Math.round((b-a)/(1000*60*60*24)));
 }
 
-function soundBoasVindas() {
-  // Sequência suave: três tons ascendentes
-  setTimeout(() => playBeep(523, 0.12, 'sine', 0.3), 0);
-  setTimeout(() => playBeep(659, 0.12, 'sine', 0.3), 150);
-  setTimeout(() => playBeep(784, 0.2,  'sine', 0.35), 300);
+/* ══════════════════════════════════════════════
+   RELÓGIO + MODO
+══════════════════════════════════════════════ */
+function atualizarRelogio() {
+  const agora = new Date();
+  document.getElementById('clock').textContent = agora.toLocaleTimeString('pt-BR');
+  const h = agora.getHours();
+  const badge = document.getElementById('mode-badge');
+  if (h >= 22 || h < 6) {
+    badge.textContent = 'Modo Noturno';
+    badge.style.color = '#818cf8';
+    badge.style.borderColor = '#818cf8';
+  } else {
+    badge.textContent = 'Diurno';
+    badge.style.color = 'var(--accent)';
+    badge.style.borderColor = 'var(--accent)';
+  }
+}
+setInterval(atualizarRelogio, 1000);
+atualizarRelogio();
+
+/* ══════════════════════════════════════════════
+   NAVEGAÇÃO — ABAS PRINCIPAIS
+══════════════════════════════════════════════ */
+document.querySelectorAll('.tabs > .tab[data-panel]').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tabs > .tab[data-panel]').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('main > .panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+  });
+});
+
+/* Sub-tabs do Noturno */
+document.querySelectorAll('[data-subpanel]').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const parent = tab.closest('.panel');
+    parent.querySelectorAll('[data-subpanel]').forEach(t => t.classList.remove('active'));
+    parent.querySelectorAll('.subpanel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('subpanel-' + tab.dataset.subpanel).classList.add('active');
+  });
+});
+
+/* ══════════════════════════════════════════════
+   MODAIS
+══════════════════════════════════════════════ */
+function abrirModal(id) { document.getElementById(id).classList.add('open'); }
+function fecharModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function confirmar(titulo, body, cb) {
+  document.getElementById('confirm-titulo').textContent = titulo;
+  document.getElementById('confirm-body').textContent = body;
+  document.getElementById('confirm-ok').onclick = () => { fecharModal('modal-confirm'); cb(); };
+  abrirModal('modal-confirm');
 }
 
-function soundConfirmacao() {
-  // Dois tons de confirmação
-  setTimeout(() => playBeep(600, 0.1, 'sine', 0.35), 0);
-  setTimeout(() => playBeep(900, 0.25, 'sine', 0.4), 120);
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+});
+
+/* ══════════════════════════════════════════════
+   PAINEL
+══════════════════════════════════════════════ */
+function renderPainel() {
+  const occ   = db.quartos.filter(q => q.status !== 'vago' && q.status !== 'limpeza').length;
+  const fora  = db.quartos.filter(q => q.status === 'fora').length;
+  const vago  = db.quartos.filter(q => q.status === 'vago').length;
+
+  // check-outs de hoje
+  const co = db.reservas.filter(r => r.checkout === hoje() && r.status === 'checkout').length;
+
+  document.getElementById('s-occ').textContent   = occ;
+  document.getElementById('s-out').textContent   = fora;
+  document.getElementById('s-co').textContent    = co;
+  document.getElementById('s-empty').textContent = vago;
+
+  renderGridQuartos('rooms-grid-painel', false);
+  renderLogGeral();
 }
 
-function soundAlertaRecep() {
-  // Alerta discreto para recepção: dois bipes
-  setTimeout(() => playBeep(440, 0.15, 'square', 0.2), 0);
-  setTimeout(() => playBeep(440, 0.15, 'square', 0.2), 300);
-}
-// ─────────────────────────────────────────────────────────────────────────────
-
-function confirmReturn(idx) {
-  const r = rooms[idx];
-  r.status = 'retornou';
-  r.time = nowStr();
-  addLog('ret', r.num, r.guest, `Retornou silenciosamente`);
-  renderRooms();
-  closeModal();
-  soundConfirmacao();
-  soundAlertaRecep();
-}
-
-function addLog(type, room, guest, desc) {
-  logs.unshift({type, room, guest, desc, time: nowStr()});
-  renderLogs();
+function renderGridQuartos(containerId, modoNoturno) {
+  const grid = document.getElementById(containerId);
+  grid.innerHTML = db.quartos.map((q, i) => {
+    const isVago = q.status === 'vago' || q.status === 'limpeza';
+    const clicavel = modoNoturno ? q.status === 'fora' : false;
+    const fn = modoNoturno && q.status === 'fora' ? `abrirConfirmRetorno(${i})` : '';
+    return `
+    <div class="room-card ${isVago ? 'vago' : ''}" ${fn ? `onclick="${fn}"` : ''}>
+      <div class="room-number">Qto ${q.num}</div>
+      <div class="room-guest">${q.hospedeName || 'Disponível'}</div>
+      <span class="room-status status-${q.status === 'limpeza' ? 'limpeza' : q.status}">
+        <i class="ri-${iconStatus(q.status)}"></i>
+        ${labelStatus(q.status)}
+      </span>
+      ${q.time ? `<div class="room-time">Desde ${q.time}</div>` : ''}
+    </div>`;
+  }).join('');
 }
 
-function renderLogs() {
-  const list = document.getElementById('log-list');
-  if (!logs.length) return;
-  list.innerHTML = logs.map(l => `
+function iconStatus(s) {
+  return s === 'fora' ? 'walk-line' : s === 'retornou' ? 'check-line' : s === 'ocupado' ? 'user-line' : s === 'limpeza' ? 'brush-line' : 'home-line';
+}
+function labelStatus(s) {
+  return s === 'fora' ? 'Fora' : s === 'retornou' ? 'Retornou' : s === 'ocupado' ? 'Ocupado' : s === 'limpeza' ? 'Limpeza' : 'Vago';
+}
+
+/* ══════════════════════════════════════════════
+   LOG GERAL
+══════════════════════════════════════════════ */
+function addLog(tipo, icone, titulo, desc) {
+  db.logGeral.unshift({ tipo, icone, titulo, desc, time: nowStr(), data: hoje() });
+  if (db.logGeral.length > 100) db.logGeral.pop();
+  salvar();
+  renderLogGeral();
+}
+
+function renderLogGeral() {
+  const el = document.getElementById('log-painel');
+  const logs = db.logGeral.slice(0, 10);
+  if (!logs.length) {
+    el.innerHTML = '<div class="empty"><i class="ri-time-line"></i><p>Nenhuma atividade ainda</p></div>';
+    return;
+  }
+  el.innerHTML = logs.map(l => `
     <div class="log-item">
-      <div class="log-icon li-${l.type}">
-        <i class="ri-${l.type==='ret'?'arrow-go-back-line':'logout-box-r-line'}"></i>
+      <div class="log-icon li-${l.tipo}"><i class="ri-${l.icone}"></i></div>
+      <div>
+        <div class="log-room">${l.titulo}</div>
+        <div class="log-desc">${l.desc}</div>
+      </div>
+      <div class="log-time">${l.time}</div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════════════
+   HÓSPEDES
+══════════════════════════════════════════════ */
+function abrirModalHospede(id) {
+  limparFormHospede();
+  if (id) {
+    const h = db.hospedes.find(x => x.id === id);
+    if (!h) return;
+    document.getElementById('modal-hospede-titulo').textContent = 'Editar Hóspede';
+    document.getElementById('hosp-nome').value  = h.nome;
+    document.getElementById('hosp-cpf').value   = h.cpf;
+    document.getElementById('hosp-tel').value   = h.tel;
+    document.getElementById('hosp-email').value = h.email;
+    document.getElementById('hosp-obs').value   = h.obs;
+    document.getElementById('hosp-nome').dataset.editId = id;
+  } else {
+    document.getElementById('modal-hospede-titulo').textContent = 'Novo Hóspede';
+    delete document.getElementById('hosp-nome').dataset.editId;
+  }
+  abrirModal('modal-hospede');
+}
+
+function limparFormHospede() {
+  ['hosp-nome','hosp-cpf','hosp-tel','hosp-email','hosp-obs'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+}
+
+function salvarHospede() {
+  const nome  = document.getElementById('hosp-nome').value.trim();
+  if (!nome) { alert('Nome obrigatório'); return; }
+  const editId = document.getElementById('hosp-nome').dataset.editId;
+
+  const dados = {
+    nome,
+    cpf:   document.getElementById('hosp-cpf').value.trim(),
+    tel:   document.getElementById('hosp-tel').value.trim(),
+    email: document.getElementById('hosp-email').value.trim(),
+    obs:   document.getElementById('hosp-obs').value.trim(),
+  };
+
+  if (editId) {
+    const idx = db.hospedes.findIndex(h => h.id === editId);
+    if (idx >= 0) db.hospedes[idx] = { ...db.hospedes[idx], ...dados };
+  } else {
+    db.hospedes.push({ id: uid(), criadoEm: Date.now(), ultimaEstadia: '', ...dados });
+    addLog('res','user-add-line', `Hóspede cadastrado: ${nome}`, 'Novo hóspede no sistema');
+  }
+
+  salvar();
+  fecharModal('modal-hospede');
+  renderHospedes();
+  popularSelectHospedes();
+}
+
+function renderHospedes() {
+  const busca = document.getElementById('busca-hospedes').value.toLowerCase();
+  const lista = db.hospedes.filter(h =>
+    h.nome.toLowerCase().includes(busca) ||
+    (h.cpf || '').includes(busca) ||
+    (h.tel || '').includes(busca)
+  );
+  const tbody = document.getElementById('tbody-hospedes');
+  if (!lista.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="padding:40px;text-align:center;color:var(--text2);">
+      <i class="ri-user-line" style="font-size:36px;display:block;margin-bottom:8px;opacity:.4;"></i>
+      ${db.hospedes.length ? 'Nenhum resultado' : 'Nenhum hóspede cadastrado'}
+    </td></tr>`;
+    return;
+  }
+  tbody.innerHTML = lista.map(h => `
+    <tr>
+      <td><strong>${h.nome}</strong></td>
+      <td>${h.cpf || '—'}</td>
+      <td>${h.tel || '—'}</td>
+      <td>${h.email || '—'}</td>
+      <td>${h.ultimaEstadia ? fmtData(h.ultimaEstadia) : '—'}</td>
+      <td style="display:flex;gap:8px;">
+        <button class="btn btn-secondary btn-sm" onclick="abrirModalHospede('${h.id}')">
+          <i class="ri-edit-line"></i>
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="excluirHospede('${h.id}')">
+          <i class="ri-delete-bin-line"></i>
+        </button>
+      </td>
+    </tr>`).join('');
+}
+
+function excluirHospede(id) {
+  const h = db.hospedes.find(x => x.id === id);
+  confirmar('Excluir Hóspede', `Excluir ${h?.nome}? Esta ação não pode ser desfeita.`, () => {
+    db.hospedes = db.hospedes.filter(x => x.id !== id);
+    salvar();
+    renderHospedes();
+    popularSelectHospedes();
+  });
+}
+
+function popularSelectHospedes() {
+  const sel = document.getElementById('res-hospede');
+  sel.innerHTML = '<option value="">Selecionar hóspede</option>' +
+    db.hospedes.map(h => `<option value="${h.id}">${h.nome}</option>`).join('');
+}
+
+/* ══════════════════════════════════════════════
+   RESERVAS
+══════════════════════════════════════════════ */
+function abrirModalReserva(id) {
+  limparFormReserva();
+  popularSelectHospedes();
+  popularSelectQuartos();
+
+  if (id) {
+    const r = db.reservas.find(x => x.id === id);
+    if (!r) return;
+    document.getElementById('modal-reserva-titulo').textContent = 'Editar Reserva';
+    document.getElementById('res-hospede').value   = r.hospedeId;
+    document.getElementById('res-quarto').value    = r.quartoNum;
+    document.getElementById('res-checkin').value   = r.checkin;
+    document.getElementById('res-checkout').value  = r.checkout;
+    document.getElementById('res-diaria').value    = r.diaria;
+    document.getElementById('res-pagamento').value = r.pagamento;
+    document.getElementById('res-obs').value       = r.obs;
+    document.getElementById('res-hospede').dataset.editId = id;
+  } else {
+    document.getElementById('modal-reserva-titulo').textContent = 'Nova Reserva';
+    delete document.getElementById('res-hospede').dataset.editId;
+    // sugerir datas
+    document.getElementById('res-checkin').value  = hoje();
+    const am = new Date(); am.setDate(am.getDate() + 1);
+    document.getElementById('res-checkout').value = am.toISOString().split('T')[0];
+  }
+  abrirModal('modal-reserva');
+}
+
+function limparFormReserva() {
+  ['res-hospede','res-quarto','res-checkin','res-checkout','res-diaria','res-obs'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('res-pagamento').value = 'dinheiro';
+}
+
+function popularSelectQuartos() {
+  const sel = document.getElementById('res-quarto');
+  sel.innerHTML = '<option value="">Selecionar quarto</option>' +
+    db.quartos.map(q => `<option value="${q.num}">Qto ${q.num} — ${q.tipo}</option>`).join('');
+}
+
+function salvarReserva() {
+  const hospedeId = document.getElementById('res-hospede').value;
+  const quartoNum  = document.getElementById('res-quarto').value;
+  const checkin    = document.getElementById('res-checkin').value;
+  const checkout   = document.getElementById('res-checkout').value;
+  const diaria     = parseFloat(document.getElementById('res-diaria').value) || 0;
+
+  if (!hospedeId || !quartoNum || !checkin || !checkout) {
+    alert('Preencha hóspede, quarto e datas');
+    return;
+  }
+  if (checkout <= checkin) { alert('Check-out deve ser após o check-in'); return; }
+
+  const hospede  = db.hospedes.find(h => h.id === hospedeId);
+  const dias     = diffDias(checkin, checkout);
+  const total    = diaria * dias;
+  const editId   = document.getElementById('res-hospede').dataset.editId;
+
+  const dados = {
+    hospedeId,
+    hospedeName: hospede?.nome || '',
+    quartoNum,
+    checkin,
+    checkout,
+    diaria,
+    total,
+    pagamento: document.getElementById('res-pagamento').value,
+    obs: document.getElementById('res-obs').value.trim(),
+  };
+
+  if (editId) {
+    const idx = db.reservas.findIndex(r => r.id === editId);
+    if (idx >= 0) db.reservas[idx] = { ...db.reservas[idx], ...dados };
+  } else {
+    db.reservas.push({ id: uid(), status: 'confirmada', criadoEm: Date.now(), ...dados });
+    addLog('res','calendar-check-line',`Reserva: ${hospede?.nome}`, `Qto ${quartoNum} | ${fmtData(checkin)} → ${fmtData(checkout)}`);
+  }
+
+  salvar();
+  fecharModal('modal-reserva');
+  renderReservas();
+}
+
+function renderReservas() {
+  const busca  = document.getElementById('busca-reservas').value.toLowerCase();
+  const filtro = document.getElementById('filtro-status-reserva').value;
+  const lista  = db.reservas.filter(r =>
+    (!filtro || r.status === filtro) &&
+    (!busca || r.hospedeName.toLowerCase().includes(busca) || r.quartoNum.includes(busca))
+  );
+  const tbody = document.getElementById('tbody-reservas');
+  if (!lista.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="padding:40px;text-align:center;color:var(--text2);">
+      <i class="ri-calendar-line" style="font-size:36px;display:block;margin-bottom:8px;opacity:.4;"></i>
+      ${db.reservas.length ? 'Nenhum resultado' : 'Nenhuma reserva cadastrada'}
+    </td></tr>`;
+    return;
+  }
+
+  const badgeRes = { confirmada:'badge-blue', checkin:'badge-green', checkout:'badge-gray', cancelada:'badge-orange' };
+  const labelRes = { confirmada:'Confirmada', checkin:'Check-in', checkout:'Check-out', cancelada:'Cancelada' };
+
+  tbody.innerHTML = lista.map(r => {
+    const dias = diffDias(r.checkin, r.checkout);
+    return `
+    <tr>
+      <td><strong>${r.hospedeName}</strong></td>
+      <td>Qto ${r.quartoNum}</td>
+      <td>${fmtData(r.checkin)}</td>
+      <td>${fmtData(r.checkout)}</td>
+      <td>${dias}d</td>
+      <td>${fmtMoeda(r.total)}</td>
+      <td><span class="badge ${badgeRes[r.status]||'badge-gray'}">${labelRes[r.status]||r.status}</span></td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap;">
+        ${r.status === 'confirmada' ? `<button class="btn btn-success btn-sm" onclick="fazerCheckin('${r.id}')"><i class="ri-login-box-line"></i></button>` : ''}
+        ${r.status === 'checkin'    ? `<button class="btn btn-primary btn-sm" onclick="fazerCheckout('${r.id}')"><i class="ri-logout-box-r-line"></i></button>` : ''}
+        <button class="btn btn-secondary btn-sm" onclick="abrirModalReserva('${r.id}')"><i class="ri-edit-line"></i></button>
+        <button class="btn btn-danger btn-sm" onclick="cancelarReserva('${r.id}')"><i class="ri-close-line"></i></button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function fazerCheckin(id) {
+  const r = db.reservas.find(x => x.id === id);
+  confirmar('Confirmar Check-in', `Fazer check-in de ${r.hospedeName} no Qto ${r.quartoNum}?`, () => {
+    r.status = 'checkin';
+    const q = db.quartos.find(x => x.num === r.quartoNum);
+    if (q) { q.status = 'ocupado'; q.hospedeId = r.hospedeId; q.hospedeName = r.hospedeName; }
+    addLog('res','login-box-line',`Check-in: ${r.hospedeName}`,`Qto ${r.quartoNum}`);
+    salvar(); renderReservas(); renderPainel();
+  });
+}
+
+function fazerCheckout(id) {
+  const r = db.reservas.find(x => x.id === id);
+  confirmar('Confirmar Check-out', `Check-out de ${r.hospedeName} do Qto ${r.quartoNum}?`, () => {
+    r.status = 'checkout';
+    const q = db.quartos.find(x => x.num === r.quartoNum);
+    if (q) { q.status = 'limpeza'; q.hospedeId = null; q.hospedeName = ''; q.time = ''; }
+    // lançar no financeiro automaticamente
+    db.financeiro.push({
+      id: uid(), tipo: 'receita', desc: `Diárias Qto ${r.quartoNum} — ${r.hospedeName}`,
+      valor: r.total, cat: 'diaria', data: hoje(), time: nowStr()
+    });
+    const h = db.hospedes.find(x => x.id === r.hospedeId);
+    if (h) h.ultimaEstadia = hoje();
+    addLog('ret','logout-box-r-line',`Check-out: ${r.hospedeName}`,`Qto ${r.quartoNum} | ${fmtMoeda(r.total)}`);
+    salvar(); renderReservas(); renderPainel(); renderFinanceiro(); renderGovernanca();
+  });
+}
+
+function cancelarReserva(id) {
+  const r = db.reservas.find(x => x.id === id);
+  confirmar('Cancelar Reserva', `Cancelar reserva de ${r.hospedeName}?`, () => {
+    r.status = 'cancelada';
+    salvar(); renderReservas();
+  });
+}
+
+/* ══════════════════════════════════════════════
+   FINANCEIRO
+══════════════════════════════════════════════ */
+function lancarFinanceiro() {
+  const tipo  = document.getElementById('fin-tipo').value;
+  const desc  = document.getElementById('fin-desc').value.trim();
+  const valor = parseFloat(document.getElementById('fin-valor').value) || 0;
+  const cat   = document.getElementById('fin-cat').value;
+  if (!desc || valor <= 0) { alert('Preencha descrição e valor'); return; }
+
+  db.financeiro.push({ id: uid(), tipo, desc, valor, cat, data: hoje(), time: nowStr() });
+  addLog('fin', tipo === 'receita' ? 'arrow-up-circle-line' : 'arrow-down-circle-line',
+    `${tipo === 'receita' ? 'Receita' : 'Despesa'}: ${desc}`, fmtMoeda(valor));
+  salvar();
+  document.getElementById('fin-desc').value  = '';
+  document.getElementById('fin-valor').value = '';
+  renderFinanceiro();
+}
+
+function renderFinanceiro() {
+  const lancHoje = db.financeiro.filter(f => f.data === hoje());
+  const receita  = lancHoje.filter(f => f.tipo === 'receita').reduce((s,f) => s + f.valor, 0);
+  const despesa  = lancHoje.filter(f => f.tipo === 'despesa').reduce((s,f) => s + f.valor, 0);
+  const saldo    = receita - despesa;
+
+  document.getElementById('fin-receita').textContent = fmtMoeda(receita);
+  document.getElementById('fin-despesa').textContent = fmtMoeda(despesa);
+  const sEl = document.getElementById('fin-saldo');
+  sEl.textContent = fmtMoeda(saldo);
+  sEl.className   = 'fin-value ' + (saldo >= 0 ? 'green' : 'red');
+
+  const el = document.getElementById('log-financeiro');
+  if (!lancHoje.length) {
+    el.innerHTML = '<div class="empty"><i class="ri-money-dollar-circle-line"></i><p>Nenhum lançamento hoje</p></div>';
+    return;
+  }
+  el.innerHTML = [...lancHoje].reverse().map(f => `
+    <div class="log-item">
+      <div class="log-icon li-fin">
+        <i class="ri-${f.tipo === 'receita' ? 'arrow-up-circle-line' : 'arrow-down-circle-line'}"
+           style="color:${f.tipo === 'receita' ? 'var(--green)' : 'var(--red)'}"></i>
+      </div>
+      <div>
+        <div class="log-room">${f.desc}</div>
+        <div class="log-desc">${f.cat} · ${f.time}</div>
+      </div>
+      <div class="log-time" style="color:${f.tipo === 'receita' ? 'var(--green)' : 'var(--red)'}">
+        ${f.tipo === 'receita' ? '+' : '-'}${fmtMoeda(f.valor)}
+      </div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════════════
+   GOVERNANÇA
+══════════════════════════════════════════════ */
+function renderGovernanca() {
+  const limpos    = db.quartos.filter(q => q.status === 'vago').length;
+  const limpando  = db.quartos.filter(q => q.status === 'limpeza').length;
+  const pendentes = db.quartos.filter(q => q.status === 'ocupado').length;
+  document.getElementById('gov-limpos').textContent   = limpos;
+  document.getElementById('gov-limpando').textContent = limpando;
+  document.getElementById('gov-pendentes').textContent= pendentes;
+
+  const grid = document.getElementById('gov-grid');
+  grid.innerHTML = db.quartos.map((q, i) => {
+    const cores = { vago:'#14532d', ocupado:'#1e3a5f', limpeza:'#3b1f6e', fora:'#7c2d12', retornou:'#14532d' };
+    const textos= { vago:'Limpo', ocupado:'Ocupado', limpeza:'Em limpeza', fora:'Fora', retornou:'Retornou' };
+    return `
+    <div class="gov-card">
+      <div class="gov-num">Qto ${q.num}</div>
+      <div style="font-size:11px;color:var(--text2);">${q.tipo}</div>
+      <div style="margin:8px 0;">
+        <span class="badge" style="background:${cores[q.status]||'#333'};color:#fff;">
+          ${textos[q.status]||q.status}
+        </span>
+      </div>
+      ${q.hospedeName ? `<div style="font-size:11px;color:var(--text2);margin-bottom:8px;">${q.hospedeName}</div>` : ''}
+      <div class="gov-status-btns">
+        <button class="gov-btn" style="background:#14532d;color:#bbf7d0;" onclick="setStatusQuarto(${i},'vago')">
+          <i class="ri-check-line"></i> Limpo
+        </button>
+        <button class="gov-btn" style="background:#3b1f6e;color:#d8b4fe;" onclick="setStatusQuarto(${i},'limpeza')">
+          <i class="ri-brush-line"></i> Em Limpeza
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setStatusQuarto(i, status) {
+  const q = db.quartos[i];
+  q.status = status;
+  if (status === 'vago') { q.hospedeId = null; q.hospedeName = ''; q.time = ''; }
+  addLog('ret','brush-line',`Qto ${q.num}: ${status === 'vago' ? 'Limpo' : 'Em Limpeza'}`, 'Governança');
+  salvar(); renderGovernanca(); renderPainel();
+}
+
+/* ══════════════════════════════════════════════
+   CONTROLE NOTURNO
+══════════════════════════════════════════════ */
+function renderNoturno() {
+  const occ   = db.quartos.filter(q => q.status !== 'vago' && q.status !== 'limpeza').length;
+  const fora  = db.quartos.filter(q => q.status === 'fora').length;
+  const ret   = db.quartos.filter(q => q.status === 'retornou').length;
+  const vago  = db.quartos.filter(q => q.status === 'vago').length;
+  document.getElementById('ns-occ').textContent   = occ;
+  document.getElementById('ns-out').textContent   = fora;
+  document.getElementById('ns-ret').textContent   = ret;
+  document.getElementById('ns-empty').textContent = vago;
+  renderGridQuartos('rooms-grid-noturno', true);
+  renderLogNoturno();
+  popularQRSelect();
+}
+
+function abrirConfirmRetorno(i) {
+  const q = db.quartos[i];
+  confirmar(`Retorno — Qto ${q.num}`, `${q.hospedeName || 'Hóspede'} retornou ao hotel?`, () => {
+    confirmarRetorno(i);
+  });
+}
+
+function confirmarRetorno(i) {
+  const q = db.quartos[i];
+  q.status = 'retornou';
+  q.time   = nowStr();
+  db.logNoturno.unshift({ tipo:'ret', room:q.num, guest:q.hospedeName, desc:'Retornou silenciosamente', time: nowStr() });
+  addLog('ret','arrow-go-back-line',`Retorno: Qto ${q.num}`,q.hospedeName||'');
+  soundConfirmacao();
+  salvar(); renderNoturno(); renderPainel();
+}
+
+function renderLogNoturno() {
+  const el = document.getElementById('log-noturno');
+  if (!db.logNoturno.length) {
+    el.innerHTML = '<div class="empty"><i class="ri-file-list-line"></i><p>Nenhuma atividade registrada</p></div>';
+    return;
+  }
+  el.innerHTML = db.logNoturno.slice(0, 50).map(l => `
+    <div class="log-item">
+      <div class="log-icon li-${l.tipo}">
+        <i class="ri-${l.tipo === 'ret' ? 'arrow-go-back-line' : 'logout-box-r-line'}"></i>
       </div>
       <div>
         <div class="log-room">Quarto ${l.room} · ${l.guest}</div>
         <div class="log-desc">${l.desc}</div>
       </div>
       <div class="log-time">${l.time}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-function showPanel(name, tab) {
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
-  tab.classList.add('active');
-}
-
-function populateQRSelect() {
+/* ══════════════════════════════════════════════
+   QR CODE
+══════════════════════════════════════════════ */
+function popularQRSelect() {
   const sel = document.getElementById('qr-room');
+  const ocupados = db.quartos.filter(q => q.status === 'ocupado' || q.status === 'fora' || q.status === 'retornou');
   sel.innerHTML = '<option value="">Selecione o quarto</option>' +
-    rooms.filter(r=>r.status!=='vago').map(r=>
-      `<option value="${r.num}">${r.num} — ${r.guest}</option>`
-    ).join('');
+    ocupados.map(q => `<option value="${q.num}">Qto ${q.num}${q.hospedeName ? ' — ' + q.hospedeName : ''}</option>`).join('');
 }
 
-function generateQR() {
-  const room = document.getElementById('qr-room').value;
-  const guest = document.getElementById('qr-guest').value;
+function gerarQR() {
+  const room  = document.getElementById('qr-room').value;
+  const guest = document.getElementById('qr-guest').value.trim();
   if (!room) { alert('Selecione o quarto'); return; }
-  const name = guest || rooms.find(r=>r.num===room)?.guest || 'Hóspede';
-  const url = `${location.href}?room=${room}&guest=${encodeURIComponent(name)}`;
-
-  // QR simples via API gratuita
-  const qrBox = document.getElementById('qr-box');
-  qrBox.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(url)}" style="border-radius:8px;">`;
-
-  document.getElementById('qr-info').innerHTML = `
-    <strong>Quarto ${room}</strong>
-    ${name}<br>
-    <span style="color:var(--green);font-size:11px;"><i class="ri-check-line"></i> QR Code gerado com sucesso</span>
-  `;
+  const q    = db.quartos.find(x => x.num === room);
+  const nome = guest || q?.hospedeName || 'Hóspede';
+  const url  = `${location.origin}${location.pathname}?room=${room}&guest=${encodeURIComponent(nome)}`;
+  document.getElementById('qr-box').innerHTML =
+    `<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(url)}" style="border-radius:8px;width:180px;height:180px;">`;
+  document.getElementById('qr-info').innerHTML =
+    `<strong>Quarto ${room}</strong>${nome}<br><span style="color:var(--green);font-size:11px;"><i class="ri-check-line"></i> QR gerado</span>`;
   document.getElementById('btn-print').style.display = 'flex';
   document.getElementById('guest-room-num').textContent = room;
 }
 
-function printQR() { window.print(); }
-
-function registerReturn() {
-  soundBoasVindas(); // toca no clique do hóspede — interação válida
-  const params = new URLSearchParams(location.search);
-  const roomNum = params.get('room') || document.getElementById('guest-room-num').textContent;
-  const idx = rooms.findIndex(r=>r.num===roomNum);
-  if (idx>=0 && rooms[idx].status==='fora') {
-    openModal(idx);
+/* ══════════════════════════════════════════════
+   TELA DO HÓSPEDE (QR)
+══════════════════════════════════════════════ */
+function registrarRetornoHospede() {
+  soundBoasVindas();
+  const num = document.getElementById('guest-room-num').textContent;
+  const idx = db.quartos.findIndex(q => q.num === num);
+  if (idx >= 0 && db.quartos[idx].status === 'fora') {
+    confirmarRetorno(idx);
   } else {
     alert('Retorno já registrado ou quarto não encontrado.');
   }
 }
 
-// Verificar parâmetros URL para tela do hóspede
-const params = new URLSearchParams(location.search);
-if (params.get('room')) {
-  const roomNum = params.get('room');
-  document.getElementById('guest-room-num').textContent = roomNum;
-  showPanel('hospede', document.querySelectorAll('.tab')[2]);
+/* ══════════════════════════════════════════════
+   SONS
+══════════════════════════════════════════════ */
+function playBeep(freq=880,dur=0.15,type='sine',vol=0.4){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.type=type;osc.frequency.setValueAtTime(freq,ctx.currentTime);
+    gain.gain.setValueAtTime(vol,ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+    osc.start(ctx.currentTime);osc.stop(ctx.currentTime+dur);
+  }catch(e){}
+}
+function soundBoasVindas(){
+  setTimeout(()=>playBeep(523,.12,'sine',.3),0);
+  setTimeout(()=>playBeep(659,.12,'sine',.3),150);
+  setTimeout(()=>playBeep(784,.2,'sine',.35),300);
+}
+function soundConfirmacao(){
+  setTimeout(()=>playBeep(600,.1,'sine',.35),0);
+  setTimeout(()=>playBeep(900,.25,'sine',.4),120);
 }
 
-renderRooms();
+/* ══════════════════════════════════════════════
+   INICIALIZAÇÃO
+══════════════════════════════════════════════ */
+carregar();
+renderPainel();
+renderHospedes();
+renderReservas();
+renderFinanceiro();
+renderGovernanca();
+renderNoturno();
+popularSelectHospedes();
+
+// Parâmetros URL → tela do hóspede via QR
+const urlParams = new URLSearchParams(location.search);
+if (urlParams.get('room')) {
+  const roomNum = urlParams.get('room');
+  document.getElementById('guest-room-num').textContent = roomNum;
+  // Navegar para Controle Noturno > Tela Hóspede
+  document.querySelector('[data-panel="noturno"]').click();
+  setTimeout(() => {
+    document.querySelector('[data-subpanel="n-hospede"]').click();
+  }, 50);
+}
 </script>
 </body>
 </html>
