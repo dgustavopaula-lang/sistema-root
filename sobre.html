@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conheça o Sistema-Root · GPS.dev</title>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --dark: #0f172a; --dark2: #1e293b; --dark3: #334155;
+  --orange: #F97316; --orange-light: #FB923C; --orange-dim: rgba(249,115,22,0.12);
+  --slate: #94a3b8; --light: #f8fafc; --white: #ffffff;
+  --radius: 12px; --radius-lg: 20px;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--dark); color: var(--light); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(15,23,42,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(249,115,22,0.15);
+}
+.nav-logo {
+  font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.4rem;
+  color: var(--orange); letter-spacing: -1px; text-decoration: none;
+}
+.nav-logo span { color: var(--white); }
+nav ul { display: flex; gap: 1.5rem; list-style: none; }
+nav ul a { color: var(--slate); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+nav ul a:hover { color: var(--orange); }
+.nav-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--slate); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+.nav-back:hover { color: var(--orange); }
+
+/* HERO */
+.hero {
+  min-height: 60vh; display: flex; align-items: center;
+  padding: 8rem 2rem 4rem; position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse 50% 60% at 80% 30%, rgba(249,115,22,0.07) 0%, transparent 70%),
+              radial-gradient(ellipse 30% 40% at 10% 80%, rgba(249,115,22,0.04) 0%, transparent 70%);
+}
+.hero-grid {
+  position: absolute; inset: 0; z-index: 0; opacity: 0.025;
+  background-image: linear-gradient(var(--slate) 1px, transparent 1px), linear-gradient(90deg, var(--slate) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+.hero-label {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--orange-dim); border: 1px solid rgba(249,115,22,0.3);
+  color: var(--orange); font-size: 0.75rem; font-weight: 700;
+  padding: 0.35rem 1rem; border-radius: 999px; margin-bottom: 1.5rem;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.hero-inner h1 {
+  font-family: 'Sora', sans-serif; font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 800; line-height: 1.1; letter-spacing: -2px;
+  color: var(--white); margin-bottom: 1.25rem;
+}
+.hero-inner h1 em { font-style: normal; color: var(--orange); }
+.hero-inner p { font-size: 1.1rem; color: var(--slate); max-width: 640px; line-height: 1.75; margin-bottom: 2rem; }
+
+/* PERFIL */
+.perfil-section { padding: 5rem 2rem; }
+.container { max-width: 1000px; margin: 0 auto; }
+.perfil-grid { display: grid; grid-template-columns: 340px 1fr; gap: 3rem; align-items: start; }
+
+.perfil-card {
+  background: var(--dark2); border: 1px solid var(--dark3);
+  border-radius: var(--radius-lg); padding: 2rem; text-align: center;
+  position: sticky; top: 90px;
+}
+.avatar {
+  width: 120px; height: 120px; border-radius: 50%;
+  background: var(--orange-dim); border: 3px solid var(--orange);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.25rem;
+  font-family: 'Sora', sans-serif; font-size: 3rem; font-weight: 800; color: var(--orange);
+}
+.perfil-name { font-family: 'Sora', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--white); margin-bottom: 0.25rem; }
+.perfil-title { font-size: 0.85rem; color: var(--orange); margin-bottom: 0.5rem; font-weight: 600; }
+.perfil-local { font-size: 0.8rem; color: var(--slate); margin-bottom: 1.5rem; }
+.perfil-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+.stat { background: var(--dark); border: 1px solid var(--dark3); border-radius: 8px; padding: 0.75rem; }
+.stat-n { font-family: 'Sora', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--orange); }
+.stat-l { font-size: 0.7rem; color: var(--slate); }
+.social-links { display: flex; flex-direction: column; gap: 0.6rem; }
+.social-link {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.6rem 1rem; border-radius: 8px;
+  background: var(--dark); border: 1px solid var(--dark3);
+  color: var(--light); text-decoration: none; font-size: 0.85rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+.social-link:hover { border-color: var(--orange); color: var(--orange); }
+.social-link i { color: var(--orange); font-size: 1rem; }
+
+/* CONTEÚDO */
+.perfil-content { display: flex; flex-direction: column; gap: 2.5rem; }
+.content-block {
+  background: var(--dark2); border: 1px solid var(--dark3);
+  border-radius: var(--radius-lg); padding: 2rem;
+}
+.block-label {
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--orange); margin-bottom: 0.5rem;
+}
+.block-title {
+  font-family: 'Sora', sans-serif; font-size: 1.3rem; font-weight: 700;
+  color: var(--white); margin-bottom: 1rem; line-height: 1.3;
+}
+.block-divider { width: 36px; height: 2px; background: var(--orange); border-radius: 2px; margin-bottom: 1.25rem; }
+.block-text { font-size: 0.95rem; color: var(--slate); line-height: 1.8; }
+.block-text p { margin-bottom: 1rem; }
+.block-text strong { color: var(--white); }
+
+/* TAGS */
+.tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.tag {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--dark); border: 1px solid var(--dark3);
+  color: var(--slate); font-size: 0.8rem; padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+}
+.tag i { color: var(--orange); }
+
+/* LIVRO */
+.livro-card {
+  display: flex; gap: 1.5rem; align-items: flex-start;
+  background: var(--dark); border: 1px solid var(--dark3);
+  border-radius: var(--radius); padding: 1.5rem; margin-top: 1rem;
+  text-decoration: none; transition: border-color 0.2s;
+}
+.livro-card:hover { border-color: var(--orange); }
+.livro-capa {
+  width: 80px; height: 110px; background: var(--orange-dim);
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 2rem; color: var(--orange);
+}
+.livro-info { flex: 1; }
+.livro-titulo { font-family: 'Sora', sans-serif; font-weight: 700; color: var(--white); font-size: 1rem; margin-bottom: 0.35rem; line-height: 1.3; }
+.livro-sub { font-size: 0.8rem; color: var(--slate); margin-bottom: 0.75rem; }
+.livro-badge {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: var(--orange-dim); border: 1px solid rgba(249,115,22,0.3);
+  color: var(--orange); font-size: 0.75rem; font-weight: 600;
+  padding: 0.2rem 0.6rem; border-radius: 4px;
+}
+
+/* SISTEMA */
+.sistema-preview {
+  background: var(--dark); border: 1px solid var(--dark3);
+  border-radius: var(--radius); padding: 1.5rem; margin-top: 1rem;
+}
+.sistema-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+.sistema-icon {
+  width: 44px; height: 44px; background: var(--orange-dim);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; color: var(--orange);
+}
+.sistema-nome { font-family: 'Sora', sans-serif; font-weight: 700; color: var(--white); }
+.sistema-desc { font-size: 0.875rem; color: var(--slate); line-height: 1.6; margin-bottom: 1rem; }
+.sistema-link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  color: var(--orange); font-size: 0.875rem; font-weight: 600;
+  text-decoration: none;
+}
+.sistema-link:hover { text-decoration: underline; }
+
+/* CTA */
+.cta-section {
+  padding: 5rem 2rem; text-align: center;
+  background: linear-gradient(135deg, var(--dark2) 0%, rgba(249,115,22,0.04) 100%);
+  border-top: 1px solid var(--dark3);
+}
+.cta-section h2 { font-family: 'Sora', sans-serif; font-size: clamp(1.6rem, 3vw, 2.5rem); font-weight: 800; color: var(--white); margin-bottom: 1rem; letter-spacing: -1px; }
+.cta-section p { color: var(--slate); margin-bottom: 2rem; font-size: 1rem; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--orange); color: var(--white);
+  padding: 0.9rem 2rem; border-radius: var(--radius);
+  font-weight: 700; font-size: 1rem; text-decoration: none;
+  transition: all 0.2s; box-shadow: 0 4px 24px rgba(249,115,22,0.35);
+}
+.btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: transparent; color: var(--light);
+  padding: 0.9rem 2rem; border-radius: var(--radius);
+  font-weight: 600; font-size: 1rem; text-decoration: none;
+  border: 1px solid var(--dark3); transition: all 0.2s; margin-left: 1rem;
+}
+.btn-secondary:hover { border-color: var(--orange); color: var(--orange); }
+
+/* FOOTER */
+footer { background: var(--dark); border-top: 1px solid var(--dark3); padding: 2rem; text-align: center; }
+footer p { font-size: 0.85rem; color: var(--slate); }
+footer a { color: var(--orange); text-decoration: none; }
+
+/* WHATSAPP */
+.whatsapp-float {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+  background: #25d366; color: white; width: 56px; height: 56px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+  text-decoration: none; transition: transform 0.2s;
+}
+.whatsapp-float:hover { transform: scale(1.1); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav ul { display: none; }
+  .perfil-grid { grid-template-columns: 1fr; }
+  .perfil-card { position: static; }
+  .livro-card { flex-direction: column; }
+  .btn-secondary { margin-left: 0; margin-top: 0.75rem; }
+}
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">GPS<span>.dev</span></a>
+  <ul>
+    <li><a href="index.html#casos">Casos reais</a></li>
+    <li><a href="index.html#preco">Preços</a></li>
+    <li><a href="index.html#contato">Contato</a></li>
+    <li><a href="https://wa.me/5564992035821" target="_blank" style="color:var(--orange);font-weight:700;">WhatsApp</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-label"><i class="ri-user-star-line"></i> Conheça o criador</div>
+    <h1>Gustavo Paula Santos<br><em>GPS.dev</em></h1>
+    <p>Filósofo, pesquisador acadêmico, escritor e desenvolvedor web. Criador do Sistema-Root — sistemas de gestão sob medida para pequenas empresas, entregues em dias, sem mensalidade de software.</p>
+  </div>
+</div>
+
+<!-- PERFIL -->
+<section class="perfil-section">
+  <div class="container">
+    <div class="perfil-grid">
+
+      <!-- CARD LATERAL -->
+      <div class="perfil-card reveal">
+        <div class="avatar">G</div>
+        <div class="perfil-name">Gustavo Paula Santos</div>
+        <div class="perfil-title">Full Stack Developer · AI Ethics Consultant · Filósofo</div>
+        <div class="perfil-local"><i class="ri-map-pin-line"></i> Paranaiguara, Goiás · Brasil</div>
+
+        <div class="perfil-stats">
+          <div class="stat"><div class="stat-n">6+</div><div class="stat-l">sistemas entregues</div></div>
+          <div class="stat"><div class="stat-n">20+</div><div class="stat-l">anos de pesquisa</div></div>
+          <div class="stat"><div class="stat-n">3</div><div class="stat-l">livros publicados</div></div>
+          <div class="stat"><div class="stat-n">4</div><div class="stat-l">idiomas</div></div>
+        </div>
+
+        <div class="social-links">
+          <a href="https://www.linkedin.com/in/gustavo-paula-dos-santos-18623936b/" target="_blank" class="social-link">
+            <i class="ri-linkedin-box-line"></i> LinkedIn
+          </a>
+          <a href="https://github.com/dgustavopaula-lang" target="_blank" class="social-link">
+            <i class="ri-github-line"></i> GitHub
+          </a>
+          <a href="https://medium.com/@dgustavopaula" target="_blank" class="social-link">
+            <i class="ri-medium-line"></i> Medium
+          </a>
+          <a href="https://gustavopaulasantos.com.br" target="_blank" class="social-link">
+            <i class="ri-article-line"></i> Blog
+          </a>
+          <a href="https://www.amazon.com.br/dp/B085B9QQRX" target="_blank" class="social-link">
+            <i class="ri-book-2-line"></i> Livro na Amazon
+          </a>
+        </div>
+      </div>
+
+      <!-- CONTEÚDO -->
+      <div class="perfil-content">
+
+        <div class="content-block reveal">
+          <div class="block-label">Sobre</div>
+          <div class="block-title">Filósofo que programa</div>
+          <div class="block-divider"></div>
+          <div class="block-text">
+            <p>Sou <strong>Gustavo Paula Santos</strong>, desenvolvedor web freelance, filósofo, pesquisador acadêmico e escritor. Opero sob a marca <strong>GPS.dev</strong> — "filósofo que programa" — construindo sistemas de gestão leves, rápidos e sem dependência de plataformas caras.</p>
+            <p>Minha formação inclui Licenciatura em Filosofia, Teologia e doutoramento em Psicologia Social pela <strong>Universidad John F. Kennedy</strong> (Buenos Aires), com todas as disciplinas concluídas e tese desenvolvida na área de imagem e identidade — tselem em hebraico, a marca da imagem divina no ser humano.</p>
+            <p>Trabalho sob o princípio que guia toda minha abordagem: <strong>diagnóstico antes do código</strong>. Entendo o contexto humano de cada negócio antes de escrever uma linha de código. Não entrego apenas software — entrego soluções que as pessoas conseguem usar de verdade.</p>
+          </div>
+          <div class="tags">
+            <span class="tag"><i class="ri-translate-2"></i> Português · Inglês · Espanhol · Hebraico Bíblico</span>
+            <span class="tag"><i class="ri-graduation-cap-line"></i> Filosofia · Teologia · Psicologia Social</span>
+            <span class="tag"><i class="ri-code-s-slash-line"></i> HTML · CSS · JS · React</span>
+          </div>
+        </div>
+
+        <div class="content-block reveal">
+          <div class="block-label">Pesquisa e Escrita</div>
+          <div class="block-title">Filosofia, IA e ética no mundo digital</div>
+          <div class="block-divider"></div>
+          <div class="block-text">
+            <p>Escrevo regularmente sobre <strong>ética da Inteligência Artificial, filosofia da mente e os desafios civilizacionais da tecnologia</strong>. Meus artigos em inglês estão publicados no Medium e LinkedIn, e tenho artigos direcionados ao <strong>Aeon Magazine</strong> e ao <strong>Alignment Forum</strong>.</p>
+            <p>Minha tese de doutorado trata de <strong>tselem</strong> — o conceito hebraico de imagem divina —, explorando como a identidade humana se relaciona com representações digitais e o problema do alinhamento de IA. Uma questão filosófica profunda com implicações práticas urgentes.</p>
+            <p>Sou judeu convertido, com formação em <strong>hebraico bíblico avançado pela Hebrew University of Jerusalem</strong>, o que informa diretamente minha leitura de textos primários na área de ética e identidade.</p>
+          </div>
+          <div class="tags">
+            <span class="tag"><i class="ri-brain-line"></i> AI Ethics</span>
+            <span class="tag"><i class="ri-quill-pen-line"></i> Filosofia da Mente</span>
+            <span class="tag"><i class="ri-global-line"></i> Medium · LinkedIn · Aeon</span>
+            <span class="tag"><i class="ri-book-open-line"></i> Hebraico Bíblico</span>
+          </div>
+        </div>
+
+        <div class="content-block reveal">
+          <div class="block-label">Publicação</div>
+          <div class="block-title">Livro publicado na Amazon</div>
+          <div class="block-divider"></div>
+          <a href="https://www.amazon.com.br/dp/B085B9QQRX" target="_blank" class="livro-card">
+            <div class="livro-capa"><i class="ri-book-2-line"></i></div>
+            <div class="livro-info">
+              <div class="livro-titulo">God is Brazilian but Pope is Argentinian</div>
+              <div class="livro-sub">A Pluralist Church in Modern Times · English Edition · Kindle</div>
+              <div class="livro-badge"><i class="ri-amazon-line"></i> Disponível na Amazon</div>
+            </div>
+          </a>
+        </div>
+
+        <div class="content-block reveal">
+          <div class="block-label">O Sistema</div>
+          <div class="block-title">Por que o Sistema-Root?</div>
+          <div class="block-divider"></div>
+          <div class="block-text">
+            <p>O <strong>Sistema-Root</strong> nasceu de uma constatação simples: pequenos negócios no Brasil gastam R$ 300 a R$ 1.500 por mês em softwares genéricos que não resolvem seus problemas reais. Ficam presos em mensalidades eternas, sem suporte humano e sem poder de adaptação.</p>
+            <p>Como filósofo, aprendi que a melhor solução começa pelo diagnóstico correto do problema. Como desenvolvedor, aprendi a construir sistemas leves que funcionam. O Sistema-Root une as duas coisas: <strong>diagnóstico profundo + entrega rápida + você é dono do sistema</strong>.</p>
+          </div>
+
+          <div class="sistema-preview">
+            <div class="sistema-header">
+              <div class="sistema-icon"><i class="ri-hotel-line"></i></div>
+              <div>
+                <div class="sistema-nome">Atlas Hotel — Sistema de Gestão</div>
+                <div style="font-size:0.8rem;color:var(--slate);">Cliente: Paulo Cezar · Goiás · 2026</div>
+              </div>
+            </div>
+            <div class="sistema-desc">Sistema completo com 6 módulos: Painel, Reservas, Hóspedes, Financeiro, Governança e Controle Noturno com QR Code. Banco de dados na nuvem, funciona em qualquer dispositivo.</div>
+            <a href="https://dgustavopaula-lang.github.io/hotel-atlas/" target="_blank" class="sistema-link">
+              <i class="ri-external-link-line"></i> Ver sistema ao vivo
+            </a>
+          </div>
+        </div>
+
+        <div class="content-block reveal">
+          <div class="block-label">Presença Digital</div>
+          <div class="block-title">Onde me encontrar</div>
+          <div class="block-divider"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <a href="https://www.linkedin.com/in/gustavo-paula-dos-santos-18623936b/" target="_blank" class="social-link" style="justify-content:center;">
+              <i class="ri-linkedin-box-line"></i> LinkedIn
+            </a>
+            <a href="https://github.com/dgustavopaula-lang" target="_blank" class="social-link" style="justify-content:center;">
+              <i class="ri-github-line"></i> GitHub
+            </a>
+            <a href="https://medium.com/@dgustavopaula" target="_blank" class="social-link" style="justify-content:center;">
+              <i class="ri-medium-line"></i> Medium
+            </a>
+            <a href="https://gustavopaulasantos.com.br" target="_blank" class="social-link" style="justify-content:center;">
+              <i class="ri-article-line"></i> Blog
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <div class="container">
+    <h2>Quer um sistema assim<br>para o seu negócio?</h2>
+    <p>Diagnóstico gratuito. Respondo em até 24 horas pelo WhatsApp.</p>
+    <a href="https://wa.me/5564992035821?text=Olá%20Gustavo!%20Vi%20sua%20página%20e%20quero%20um%20diagnóstico%20gratuito." class="btn-primary" target="_blank">
+      <i class="ri-whatsapp-line"></i> Solicitar diagnóstico gratuito
+    </a>
+    <a href="index.html" class="btn-secondary">
+      <i class="ri-arrow-left-line"></i> Ver o Sistema-Root
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 GPS.dev · Gustavo Paula Santos ·
+    <a href="https://gustavopaulasantos.com.br" target="_blank">Blog</a> ·
+    <a href="mailto:dgustavopaula@gmail.com">dgustavopaula@gmail.com</a>
+  </p>
+</footer>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/5564992035821" class="whatsapp-float" target="_blank">
+  <i class="ri-whatsapp-line"></i>
+</a>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
